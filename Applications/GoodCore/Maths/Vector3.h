@@ -5,15 +5,16 @@
 
 namespace Good
 {
-	class Vector3
+	struct Vector2;
+
+	struct GOOD_DLL Vector3
 	{
-	public:
-		// construction
-		Vector3 ();  // uninitialized
+		Vector3 ();
 		Vector3 (Real fX, Real fY, Real fZ);
 		Vector3 (const Real* afTuple);
 		Vector3 (const Vector3& rkV);
 		Vector3( const int coord[3]);
+		Vector3(const Vector2& rkV);
 
 		void swap(Vector3& other)
 		{
@@ -88,12 +89,24 @@ namespace Good
 		static void computeExtremes (int iVQuantity, const Vector3* akPoint,
 			Vector3& rkMin, Vector3& rkMax);
 
+		inline friend ::std::ostream& operator<<(std::ostream& out, const Vector3& rkV)
+		{
+			out << rkV.x << "|" << rkV.y << "|" << rkV.z << std::endl;
+		}
+
+		inline std::string toString()
+		{
+			char buffer[MAX_CHAR];
+			sprintf_s(buffer, "\n\t%.3lf | %.3lf | %.3lf", x, y, z);
+			return std::string("\n") + typeid(*this).name() + std::string(buffer);
+		}
+
 		// special vectors
-		GOOD_DLL static const Vector3 ZERO;    // (0,0,0)
-		GOOD_DLL static const Vector3 UNIT_X;  // (1,0,0)
-		GOOD_DLL static const Vector3 UNIT_Y;  // (0,1,0)
-		GOOD_DLL static const Vector3 UNIT_Z;  // (0,0,1)
-		GOOD_DLL static const Vector3 UNIT_SCALE;     // (1,1,1)
+		static const Vector3 ZERO;    // (0,0,0)
+		static const Vector3 UNIT_X;  // (1,0,0)
+		static const Vector3 UNIT_Y;  // (0,1,0)
+		static const Vector3 UNIT_Z;  // (0,0,1)
+		static const Vector3 UNIT_SCALE;     // (1,1,1)
 
 		Real x, y, z;		
 	};

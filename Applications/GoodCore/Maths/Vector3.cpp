@@ -1,4 +1,5 @@
 #include "Vector3.h"
+#include "Vector2.h"
 
 using namespace Good; 
 
@@ -8,9 +9,9 @@ const Vector3 Vector3::UNIT_Y( 0, 1, 0 );
 const Vector3 Vector3::UNIT_Z( 0, 0, 1 );
 const Vector3 Vector3::UNIT_SCALE(1, 1, 1);
 
-inline Vector3::Vector3 ()
+inline Vector3::Vector3 ():
+	x(0), y(0), z(0)
 {
-	// uninitialized for performance in array construction
 }
 
 inline Vector3::Vector3 (Real fX, Real fY, Real fZ):
@@ -31,6 +32,12 @@ inline Vector3::Vector3 (const Vector3& rkV):
 inline Vector3::Vector3(const int coord[3]):
 	x((Real)coord[0]), y((Real)coord[1]), z((Real)coord[2])
 {
+}
+
+inline Vector3::Vector3(const Vector2& rkV):
+	x(rkV.x), y(rkV.y), z(1.0)
+{
+
 }
 
 inline Real Vector3::operator[] (const size_t i) const

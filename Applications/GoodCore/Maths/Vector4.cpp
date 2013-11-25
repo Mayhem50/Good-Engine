@@ -1,4 +1,5 @@
 #include "Vector4.h"
+#include "Vector3.h"
 
 using namespace Good; 
 
@@ -9,9 +10,9 @@ const Vector4 Vector4::UNIT_Z( 0, 0, 1, 0 );
 const Vector4 Vector4::UNIT_W( 0, 0, 0, 1 );
 const Vector4 Vector4::UNIT_SCALE(1, 1, 1, 1);
 
-inline Vector4::Vector4 ()
-{
-	// uninitialized for performance in array construction
+inline Vector4::Vector4 ():
+	x(0), y(0), z(0), w(0)
+{	
 }
 
 inline Vector4::Vector4 (Real fX, Real fY, Real fZ, Real fW):
@@ -41,18 +42,18 @@ inline Vector4::Vector4(const Vector3& rkV):
 {
 }
 
-inline Real Vector4::operator[] (const size_t i) const
+inline Real Vector4::operator[] (const size_t idx) const
 {
-	assert( i < 4 );
+	assert( idx < 4 );
 
-	return *(&x+i);
+	return *(&x+idx);
 }
 
-inline Real& Vector4::operator[] (const size_t i)
+inline Real& Vector4::operator[] (const size_t idx)
 {
-	assert( i < 4 );
+	assert( idx < 4 );
 
-	return *(&x+i);
+	return *(&x+idx);
 }
 
 inline Vector4& Vector4::operator= (const Vector4& rkV)

@@ -17,7 +17,21 @@ const Real Math::LN_10 = Math::Log(10.0f);
 const Real Math::INV_LN_2 = 1.0f/Math::LN_2;
 const Real Math::INV_LN_10 = 1.0f/Math::LN_10;
 
-double Math::FastInvSqrt (Real dValue)
+#ifdef _USEFLOAT
+//For float use
+Real Math::FastInvSqrt (Real fValue)
+{
+	Real fHalf = 0.5f*fValue;
+	int i  = *(int*)&fValue;
+	i = 0x5f3759df - (i >> 1);
+	fValue = *(Real*)&i;
+	fValue = fValue*(1.5f - fHalf*fValue*fValue);
+	return fValue;
+}
+
+#else
+
+Real Math::FastInvSqrt (Real dValue)
 {
 	double dHalf = 0.5*dValue;
 	Integer64 i  = *(Integer64*)&dValue;
@@ -29,16 +43,7 @@ double Math::FastInvSqrt (Real dValue)
 	return dValue;
 }
 
-//For float use
-/*Real Math::FastInvSqrt (Real fValue)
-{
-Real fHalf = 0.5f*fValue;
-int i  = *(int*)&fValue;
-i = 0x5f3759df - (i >> 1);
-fValue = *(Real*)&i;
-fValue = fValue*(1.5f - fHalf*fValue*fValue);
-return fValue;
-}*/
+#endif // _DOUBLEPRECISION
 
 Real Math::ACos (Real fValue)
 {

@@ -2,7 +2,12 @@
 
 using namespace Good;
 
-Vector2::Vector2()
+const Vector2 Vector2::ZERO( 0, 0 );
+const Vector2 Vector2::UNIT_X( 1, 0 );
+const Vector2 Vector2::UNIT_Y( 0, 1 );
+
+Vector2::Vector2():
+	x(0), y(0)
 {
 }
 
@@ -17,11 +22,6 @@ Vector2::Vector2(const Real scaler):
 }
 
 Vector2::Vector2(const Real coord[2]):
-	x(coord[0]), y(coord[1])
-{
-}
-
-Vector2::Vector2(const int coord[2]):
 	x(coord[0]), y(coord[1])
 {
 }
@@ -185,7 +185,7 @@ Real Vector2::sqrLenght() const
 	return (x * x + y *y);
 }
 
-Real Vector2::module() const const 
+Real Vector2::module() const
 {
 	return lenght();
 }

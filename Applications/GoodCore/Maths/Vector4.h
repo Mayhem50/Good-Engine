@@ -2,13 +2,13 @@
 #include <assert.h>
 
 #include "Math.h"
-#include "Vector3.h"
 
 namespace Good
 {
-	class Vector4
+	struct Vector3;
+
+	struct Vector4
 	{
-	public:
 		Vector4 ();
 		Vector4 (Real fX, Real fY, Real fZ, Real fW);
 		Vector4 (const Real* afTuple);
@@ -25,8 +25,8 @@ namespace Good
 		}
 
 		// coordinate access
-		Real operator[] (const size_t i) const;
-		Real& operator[] (const size_t i);
+		Real operator[] (const size_t idx) const;
+		Real& operator[] (const size_t idx);
 
 		// assignment
 		Vector4& operator= (const Vector4& rkV);		
@@ -62,13 +62,25 @@ namespace Good
 		Real dotProduct (const Vector4& rkV) const;
 		Real normalize ();
 
+		inline friend ::std::ostream& operator<<(std::ostream& out, const Vector4& rkV)
+		{
+			out << rkV.x << "|" << rkV.y << "|" << rkV.z << "|" << rkV.w << std::endl;
+		}
+
+		inline std::string toString()
+		{
+			char buffer[MAX_CHAR];
+			sprintf_s(buffer, "\n\t%.3lf | %.3lf | %.3lf | %.3lf", x, y, z, w);
+			return std::string("\n") + typeid(*this).name() + std::string(buffer);
+		}
+
 		// special vectors
-		GOOD_DLL static const Vector4 ZERO;    // (0,0,0,0)
-		GOOD_DLL static const Vector4 UNIT_X;  // (1,0,0,0)
-		GOOD_DLL static const Vector4 UNIT_Y;  // (0,1,0,0)
-		GOOD_DLL static const Vector4 UNIT_Z;  // (0,0,1,0)		
-		GOOD_DLL static const Vector4 UNIT_W;  // (0,0,0,1)
-		GOOD_DLL static const Vector4 UNIT_SCALE;     // (1,1,1,1)
+		static const Vector4 ZERO;    // (0,0,0,0)
+		static const Vector4 UNIT_X;  // (1,0,0,0)
+		static const Vector4 UNIT_Y;  // (0,1,0,0)
+		static const Vector4 UNIT_Z;  // (0,0,1,0)		
+		static const Vector4 UNIT_W;  // (0,0,0,1)
+		static const Vector4 UNIT_SCALE;     // (1,1,1,1)
 
 		Real x, y, z, w;		
 	};

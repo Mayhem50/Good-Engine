@@ -6,14 +6,12 @@
 
 namespace Good
 {
-	class Vector2
+	struct GOOD_DLL Vector2
 	{
-	public:
 		Vector2(void);
 		Vector2(const Real fX, const Real fY);
 		Vector2(const Real scaler);
 		Vector2(const Real coord[2]);
-		Vector2(const int coord[2]);
 
 		inline void swap(Vector2& rkV)
 		{
@@ -49,7 +47,7 @@ namespace Good
 
 		Real lenght() const;
 		Real sqrLenght() const;
-		Real module() const const ;
+		Real module() const;
 		Real distance(const Vector2& rkV) const ;
 		Real sqrDistance(const Vector2& rkV) const ;
 		Real dotProduct(const Vector2& rkV) const ;
@@ -59,6 +57,22 @@ namespace Good
 		Real crosProduct(const Vector2& rkV) const;
 
 		Vector2 perpendicular();
+
+		static const Vector2 ZERO;    // (0,0)
+		static const Vector2 UNIT_X;  // (1,0)
+		static const Vector2 UNIT_Y;  // (0,1)
+
+		inline friend ::std::ostream& operator<<(std::ostream& out, const Vector2& rkV)
+		{
+			out << rkV.x << "|" << rkV.y << std::endl;
+		}
+
+		inline std::string toString()
+		{
+			char buffer[MAX_CHAR];
+			sprintf_s(buffer, "\n\t%.3lf | %.3lf", x, y);
+			return std::string("\n") + typeid(*this).name() + std::string(buffer);
+		}
 		
 		Real x, y;
 	};

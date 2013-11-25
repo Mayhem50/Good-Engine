@@ -1,15 +1,26 @@
 #pragma once
 
 #include <cmath>
-#include <float.h>
 #include <random>
 
-#include "GoodFoundationLib.h"
+#include "../Core/GoodFoundationLib.h"
 
 namespace Good
 {
 	typedef __int64 Integer64;
-	typedef double Real;	
+
+#ifdef _USEFLOAT
+	typedef float Real;
+#else
+	typedef double Real;
+#endif
+
+	enum AXIS
+	{
+		X_AXIS,
+		Y_AXIS,
+		Z_AXIS
+	};
 
 	class Math
 	{
