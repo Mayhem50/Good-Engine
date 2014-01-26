@@ -1,9 +1,9 @@
 #pragma once
 #include <string>
 
-#include "Export.h"
+#include "../../GoodCore/Core/GoodFoundation.h"
 
-class EXPORT_DLL ILogger
+class GOOD_DLL ILogger
 {
 public:
 	virtual ~ILogger(void) = 0;

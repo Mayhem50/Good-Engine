@@ -1,30 +1,37 @@
 #pragma once
 
-#include "../Math/Vectors.h"
+#include "GoodFoundation.h"
+#include "IRenderable.h"
+
+#include <memory>
+#include <vector>
 
 namespace Good{
 	struct Vertex
 	{
-		Vertex(void):
-			position(Vector3::ZERO),
-			texture(Vector2::ZERO),
-			normal(Vector3::ZERO),
-			indice(0)
-		{}
+		Vertex(void);
+		~Vertex(void);
 
-		Vertex(const Vector3& position_, const Vector2& texture_, const Vector3& normal_, double indice_):
-			position(position_),
-			texture(texture_),
-			normal(normal_),
-			indice(indice_)
-		{}
+		glm::vec3 position;
+		glm::vec3 color;
+		glm::vec3 normal;
+		glm::vec2 uv;
 
-		~Vertex(void){}
+		unsigned int indice;
 
-		Vector3 position;
-		Vector2 texture;
-		Vector3 normal;
-		Real indice;
+		bool operator==(const Vertex& vertex) const;
+		bool operator!=(const Vertex& vertex) const;
+
+		/*
+		glm::vec3 secondaryColor;
+		glm::vec3 fogCoord;
+		GLBool edgeFlag;*/
+
+	private:
+		void _randomColor();
 	};
+
+	typedef std::shared_ptr<Vertex> VertexPtr;
+	typedef std::vector<Vertex> VerticesList;
 }
 

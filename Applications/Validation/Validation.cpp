@@ -1,206 +1,238 @@
-// Validation.cpp : Defines the entry point for the application.
+// Tuto1.cpp : définit le point d'entrée pour l'application console.
 //
 
-#include "stdafx.h"
-#include "Validation.h"
+#include <stdio.h>
+#include <stdlib.h>
 
-#include "../Core/GoodFoundationLib.h"
-#include "../Core/LogManager.h"
-#include "../Math/Matrix4.h"
-#include "../Core/SceneManager.h"
+#include <string>
 
-#define MAX_LOADSTRING 100
+// Include GLEW
+#include <GL/glew.h>
+
+// Include GLFW
+#include <GLFW/glfw3.h>
+
+#include <glm\gtc\matrix_transform.hpp>
+#include <glm/gtc/constants.hpp>
+
+#include "../GoodCore/Core/GLSLProgram.h"
+#include "../GoodCore/Core/LoaderObj.h"
+#include "../GoodCore/Core/Mesh.h"
+
+static void keyCallback(GLFWwindow* window, int key, int scanCode, int action, int mods);
+void computeMotion(GLFWwindow* window, int key, int action);
 
 using namespace Good;
 
-// Global Variables:
-HINSTANCE hInst;								// current instance
-TCHAR szTitle[MAX_LOADSTRING];					// The title bar text
-TCHAR szWindowClass[MAX_LOADSTRING];			// the main window class name
+ViewportPtr gViewport = nullptr;
+CameraPtr gCamera = nullptr;
 
-// Forward declarations of functions included in this code module:
-ATOM				MyRegisterClass(HINSTANCE hInstance);
-BOOL				InitInstance(HINSTANCE, int);
-LRESULT CALLBACK	WndProc(HWND, UINT, WPARAM, LPARAM);
-INT_PTR CALLBACK	About(HWND, UINT, WPARAM, LPARAM);
-
-int APIENTRY _tWinMain(_In_ HINSTANCE hInstance,
-											 _In_opt_ HINSTANCE hPrevInstance,
-											 _In_ LPTSTR    lpCmdLine,
-											 _In_ int       nCmdShow)
+int main(int argc, char* argv[])
 {
-	UNREFERENCED_PARAMETER(hPrevInstance);
-	UNREFERENCED_PARAMETER(lpCmdLine);
-
-	// TODO: Place code here.	
-	LogManager *manager = LogManager::getInstancePtr();
-	ILogger* logger = manager->LoggerToFile();
-	SceneManager* sceneMgr = SceneManager::getInstancePtr();
-
-
-	MSG msg;
-	HACCEL hAccelTable;
-
-	// Initialize global strings
-	LoadString(hInstance, IDS_APP_TITLE, szTitle, MAX_LOADSTRING);
-	LoadString(hInstance, IDC_VALIDATION, szWindowClass, MAX_LOADSTRING);
-	MyRegisterClass(hInstance);
-
-	// Perform application initialization:
-	if (!InitInstance (hInstance, nCmdShow))
+	// Initialise GLFW
+	if (!glfwInit())
 	{
-		return FALSE;
+		fprintf(stderr, "Failed to initialize GLFW\n");
+		return -1;
 	}
 
-	hAccelTable = LoadAccelerators(hInstance, MAKEINTRESOURCE(IDC_VALIDATION));
+	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
+	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 2);
+	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
+	glfwWindowHint(GLFW_SAMPLES, 4);
 
-	// Main message loop:
-	while (GetMessage(&msg, NULL, 0, 0))
+	GLFWwindow* window = glfwCreateWindow(1024, 768, "Tuto OpenGL", NULL, NULL);
+
+	// Open a window and create its OpenGL context
+	if (!window)
 	{
-		if (!TranslateAccelerator(msg.hwnd, hAccelTable, &msg))
+		fprintf(stderr, "Failed to open GLFW window. If you have an Intel GPU, they are not 3.3 compatible. Try the 2.1 version of the tutorials.\n");
+		glfwTerminate();
+		return -1;
+	}
+
+	glfwMakeContextCurrent(window);
+
+	glewExperimental = true;
+	GLenum err = glewInit();
+
+	// Initialize GLEW
+	if (glewInit() != GLEW_OK) {
+		fprintf(stderr, "Failed to initialize GLEW\n");
+		return -1;
+	}
+
+	// Ensure we can capture the escape key being pressed below
+	glfwSetInputMode(window, GLFW_STICKY_KEYS, GL_TRUE);
+	glfwSetKeyCallback(window, keyCallback);
+
+	// Dark blue background
+	glClearColor(0.0f, 0.0f, 0.4f, 0.0f);
+
+	static const GLfloat cubeBufferData[] = {
+		-1.0f, -1.0f, -1.0f,
+		-1.0f, -1.0f, 1.0f,
+		-1.0f, 1.0f, 1.0f,
+		1.0f, 1.0f, -1.0f,
+		-1.0f, -1.0f, -1.0f,
+		-1.0f, 1.0f, -1.0f,
+		1.0f, -1.0f, 1.0f,
+		-1.0f, -1.0f, -1.0f,
+		1.0f, -1.0f, -1.0f,
+		1.0f, 1.0f, -1.0f,
+		1.0f, -1.0f, -1.0f,
+		-1.0f, -1.0f, -1.0f,
+		-1.0f, -1.0f, -1.0f,
+		-1.0f, 1.0f, 1.0f,
+		-1.0f, 1.0f, -1.0f,
+		1.0f, -1.0f, 1.0f,
+		-1.0f, -1.0f, 1.0f,
+		-1.0f, -1.0f, -1.0f,
+		-1.0f, 1.0f, 1.0f,
+		-1.0f, -1.0f, 1.0f,
+		1.0f, -1.0f, 1.0f,
+		1.0f, 1.0f, 1.0f,
+		1.0f, -1.0f, -1.0f,
+		1.0f, 1.0f, -1.0f,
+		1.0f, -1.0f, -1.0f,
+		1.0f, 1.0f, 1.0f,
+		1.0f, -1.0f, 1.0f,
+		1.0f, 1.0f, 1.0f,
+		1.0f, 1.0f, -1.0f,
+		-1.0f, 1.0f, -1.0f,
+		1.0f, 1.0f, 1.0f,
+		-1.0f, 1.0f, -1.0f,
+		-1.0f, 1.0f, 1.0f,
+		1.0f, 1.0f, 1.0f,
+		-1.0f, 1.0f, 1.0f,
+		1.0f, -1.0f, 1.0f
+	};
+
+	std::vector<Mesh*> MeshList;
+	int nbMesh = 1;
+
+	GLSLProgramPtr shader(new GLSLProgram("../Shaders/TransformVertexShader.glsl", "../Shaders/ColorFragmentShader.glsl"));
+
+	for (int idMesh = 0; idMesh < nbMesh; ++idMesh)
+	{
+		Mesh* mesh = new Mesh();
+
+		for (int idx = 0; idx < sizeof(cubeBufferData) / 4; idx += 3)
 		{
-			TranslateMessage(&msg);
-			DispatchMessage(&msg);
+			Vertex vertex;
+
+			vertex.position = glm::vec3(cubeBufferData[idx], cubeBufferData[idx + 1], cubeBufferData[idx + 2]);
+			mesh->addVertex(vertex);
 		}
-		
-		sceneMgr->addObject("light1");
-		sceneMgr->addObject("light2", "light1");
-		sceneMgr->addObject("light1", "light2");
-		Vector3 vector(3.0, 5.0, 3.0);
-		Matrix4 matrice(
-			10.0, -5, 0, 2,
-			3, 4, -1, 0,
-			-13, 14, 5, 1,
-			-9, -8, 7, 6);
 
-		Matrix4 inv = matrice.inverse();
-		matrice *= inv;
-		logger->write(matrice.toString());
+
+		mesh->setShaders(shader);
+		float posFactor = 0.1f * (float)idMesh;
+		mesh->setPosition(glm::vec3(posFactor));
+		mesh->setScale(glm::vec3(0.5));
+		mesh->init();
+
+		MeshList.push_back(mesh);
 	}
 
-	return (int) msg.wParam;
-}
 
-//
-//  FUNCTION: MyRegisterClass()
-//
-//  PURPOSE: Registers the window class.
-//
-ATOM MyRegisterClass(HINSTANCE hInstance)
-{
-	WNDCLASSEX wcex;
+	gViewport = ViewportPtr(new Viewport(0, 0, 1024, 768));
+	gCamera = CameraPtr(new Camera(gViewport));
 
-	wcex.cbSize = sizeof(WNDCLASSEX);
-
-	wcex.style			= CS_HREDRAW | CS_VREDRAW;
-	wcex.lpfnWndProc	= WndProc;
-	wcex.cbClsExtra		= 0;
-	wcex.cbWndExtra		= 0;
-	wcex.hInstance		= hInstance;
-	wcex.hIcon			= LoadIcon(hInstance, MAKEINTRESOURCE(IDI_VALIDATION));
-	wcex.hCursor		= LoadCursor(NULL, IDC_ARROW);
-	wcex.hbrBackground	= (HBRUSH)(COLOR_WINDOW+1);
-	wcex.lpszMenuName	= MAKEINTRESOURCE(IDC_VALIDATION);
-	wcex.lpszClassName	= szWindowClass;
-	wcex.hIconSm		= LoadIcon(wcex.hInstance, MAKEINTRESOURCE(IDI_SMALL));
-
-	return RegisterClassEx(&wcex);
-}
-
-//
-//   FUNCTION: InitInstance(HINSTANCE, int)
-//
-//   PURPOSE: Saves instance handle and creates main window
-//
-//   COMMENTS:
-//
-//        In this function, we save the instance handle in a global variable and
-//        create and display the main program window.
-//
-BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
-{
-	HWND hWnd;
-
-	hInst = hInstance; // Store instance handle in our global variable
-
-	hWnd = CreateWindow(szWindowClass, szTitle, WS_OVERLAPPEDWINDOW,
-		CW_USEDEFAULT, 0, CW_USEDEFAULT, 0, NULL, NULL, hInstance, NULL);
-
-	if (!hWnd)
-	{
-		return FALSE;
-	}
-
-	ShowWindow(hWnd, nCmdShow);
-	UpdateWindow(hWnd);
-
-	return TRUE;
-}
-
-//
-//  FUNCTION: WndProc(HWND, UINT, WPARAM, LPARAM)
-//
-//  PURPOSE:  Processes messages for the main window.
-//
-//  WM_COMMAND	- process the application menu
-//  WM_PAINT	- Paint the main window
-//  WM_DESTROY	- post a quit message and return
-//
-//
-LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
-{
-	int wmId, wmEvent;
-	PAINTSTRUCT ps;
-	HDC hdc;
-
-	switch (message)
-	{
-	case WM_COMMAND:
-		wmId    = LOWORD(wParam);
-		wmEvent = HIWORD(wParam);
-		// Parse the menu selections:
-		switch (wmId)
+	do{
+		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+		for (int idx = 0; idx < nbMesh; ++idx)
 		{
-		case IDM_ABOUT:
-			DialogBox(hInst, MAKEINTRESOURCE(IDD_ABOUTBOX), hWnd, About);
-			break;
-		case IDM_EXIT:
-			DestroyWindow(hWnd);
-			break;
-		default:
-			return DefWindowProc(hWnd, message, wParam, lParam);
+			MeshList[idx]->render(gCamera);
 		}
-		break;
-	case WM_PAINT:
-		hdc = BeginPaint(hWnd, &ps);
-		// TODO: Add any drawing code here...
-		EndPaint(hWnd, &ps);
-		break;
-	case WM_DESTROY:
-		PostQuitMessage(0);
-		break;
-	default:
-		return DefWindowProc(hWnd, message, wParam, lParam);
-	}
+		// Swap buffers
+		glfwSwapBuffers(window);
+		glFlush();
+
+		glfwPollEvents();
+	} // Check if the ESC key was pressed or the window was closed
+	while (!glfwWindowShouldClose(window));
+
+	// Close OpenGL window and terminate GLFW
+	glfwTerminate();
+
 	return 0;
 }
 
-// Message handler for about box.
-INT_PTR CALLBACK About(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
+static void keyCallback(GLFWwindow* window, int key, int scanCode, int action, int mods)
 {
-	UNREFERENCED_PARAMETER(lParam);
-	switch (message)
-	{
-	case WM_INITDIALOG:
-		return (INT_PTR)TRUE;
+	if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS)
+		glfwSetWindowShouldClose(window, GL_TRUE);
 
-	case WM_COMMAND:
-		if (LOWORD(wParam) == IDOK || LOWORD(wParam) == IDCANCEL)
-		{
-			EndDialog(hDlg, LOWORD(wParam));
-			return (INT_PTR)TRUE;
-		}
-		break;
+	else if (key != GLFW_KEY_ESCAPE && action == GLFW_PRESS)
+	{
+		computeMotion(window, key, action);
 	}
-	return (INT_PTR)FALSE;
 }
+
+void computeMotion(GLFWwindow* window, int key, int action)
+{
+	static double lastTime = glfwGetTime();
+	static double hAngle = glm::pi<double>();
+	static double vAngle = 0.0;
+	static double fov = 45.0;
+
+	static float speed = 3.0f;
+	static float mouseSpeed = 0.005f;
+
+	double currentTime = glfwGetTime();
+	float deltaTime = float(currentTime - lastTime);
+
+	double xpos, ypos;
+	glfwGetCursorPos(window, &xpos, &ypos);
+
+	glfwSetCursorPos(window, 1024 / 2, 768 / 2);
+
+	hAngle += mouseSpeed * float(1024 / 2 - xpos);
+	vAngle += mouseSpeed * float(768 / 2 - ypos);
+
+	glm::vec3 direction(cos(vAngle) * sin(hAngle),
+		sin(vAngle),
+		cos(vAngle) * cos(hAngle));
+
+	glm::vec3 right(sin(hAngle - glm::pi<float>() / 2.0),
+		0.0,
+		cos(hAngle - glm::pi<float>() / 2.0));
+
+	glm::vec3 up = glm::cross(right, direction);
+	glm::vec3 position = gCamera->from();
+
+
+	if (key == GLFW_KEY_UP && action == GLFW_PRESS)
+	{
+		position += direction * deltaTime * speed;
+	}
+
+	else if (key == GLFW_KEY_DOWN && action == GLFW_PRESS)
+	{
+		position -= direction * deltaTime * speed;
+	}
+
+	else if (key == GLFW_KEY_RIGHT && action == GLFW_PRESS)
+	{
+		position += right * deltaTime * speed;
+	}
+
+	else if (key == GLFW_KEY_LEFT && action == GLFW_PRESS)
+	{
+		position -= right * deltaTime * speed;
+	}
+
+	else if (key == GLFW_KEY_P && action == GLFW_PRESS)
+		gCamera->setType(Camera::PERSPECTIVE);
+
+	else if (key == GLFW_KEY_O && action == GLFW_PRESS)
+		gCamera->setType(Camera::ORTHOGRAPHIC);
+
+	gCamera->setFrom(position);
+	gCamera->setTo(direction);
+	gCamera->setUp(up);
+
+	lastTime = currentTime;
+}
+

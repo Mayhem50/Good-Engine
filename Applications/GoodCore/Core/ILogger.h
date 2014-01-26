@@ -1,7 +1,7 @@
 #pragma once
 #include <string>
 
-#include "../Core/GoodFoundationLib.h"
+#include "../Core/GoodFoundation.h"
 
 namespace Good
 {
