@@ -1,5 +1,5 @@
 #include "GLSLProgram.h"
- 
+
 #include <fstream>
 
 using namespace Good;
@@ -28,8 +28,8 @@ GLSLProgram::GLSLProgram(const char* vertexFile, const char* fragmentFile, const
 		_programID = glCreateProgram();
 		glAttachShader(_programID, _vertexShaderID);
 		glAttachShader(_programID, _fragmentShaderID);
-		
-	}	
+
+	}
 
 	if (geometryFile != NULL)
 	{
@@ -77,12 +77,12 @@ GLuint GLSLProgram::geometryShaderID() const
 	return _geometryShaderID;
 }
 
-std::vector<GLShaderVariable> GLSLProgram::uniforms() const
+ShaderVariablesList GLSLProgram::uniforms() const
 {
 	return _getVariables(GL_ACTIVE_UNIFORMS);
 }
 
-std::vector<GLShaderVariable> GLSLProgram::attributes() const
+ShaderVariablesList GLSLProgram::attributes() const
 {
 	return _getVariables(GL_ACTIVE_ATTRIBUTES);
 }
@@ -147,7 +147,7 @@ bool GLSLProgram::_checkShaderStatus(GLuint ID)
 		_error += shaderErrorMessage + '\n';
 	}
 
-	return result;
+	return (bool)result;
 }
 
 bool GLSLProgram::_checkProgramStatus(GLuint ID)
@@ -166,24 +166,32 @@ bool GLSLProgram::_checkProgramStatus(GLuint ID)
 		_error += shaderErrorMessage + '\n';
 	}
 
-	return result;
+	return (bool)result;
 }
 
-std::vector<GLShaderVariable> GLSLProgram::_getVariables(GLenum type) const
+ShaderVariablesList GLSLProgram::_getVariables(GLenum type) const
 {
-	std::vector<GLShaderVariable> list;
+	ShaderVariablesList list;
 	int count = 0;
 	glGetProgramiv(_programID, type, &count);
 
 	for (int idx = 0; idx < count; ++idx)
 	{
-		GLenum type;
+		GLenum varType;
 		GLint size;
+		GLsizei lenght;
 		char name[MAX_CHAR];
-		glGetActiveUniform(_programID, idx, MAX_CHAR, NULL, &size, &type, name);
+		switch (type)
+		{
+		case GL_ACTIVE_UNIFORMS:
+			glGetActiveUniform(_programID, idx, MAX_CHAR, &lenght, &size, &varType, name);
+			break;
+		case GL_ACTIVE_ATTRIBUTES:
+			glGetActiveAttrib(_programID, idx, MAX_CHAR, &lenght, &size, &varType, name);
+		}
 
-		std::tuple<std::string, GLenum> tuple(std::string(name), type);
-		list.push_back(tuple);
+		ShaderVariable variable(std::string(name), varType);
+		list.push_back(variable);
 	}
 
 	return list;

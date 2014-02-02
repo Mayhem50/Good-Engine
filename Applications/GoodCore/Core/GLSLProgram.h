@@ -12,7 +12,8 @@
 
 namespace Good
 {
-	typedef std::tuple<std::string, GLenum> GLShaderVariable;
+	typedef std::tuple<std::string, GLenum> ShaderVariable;
+	typedef std::vector<ShaderVariable> ShaderVariablesList;
 	class GOOD_DLL GLSLProgram
 	{
 	public:
@@ -24,8 +25,8 @@ namespace Good
 		GLuint fragmentShaderID() const;
 		GLuint geometryShaderID() const;
 
-		std::vector<GLShaderVariable> uniforms() const;
-		std::vector<GLShaderVariable> attributes() const;
+		ShaderVariablesList uniforms() const;
+		ShaderVariablesList attributes() const;
 
 		std::string error() const;
 
@@ -36,7 +37,7 @@ namespace Good
 		bool _compileShader(GLuint shaderID, std::string& code);
 		bool _checkShaderStatus(GLuint ID);
 		bool _checkProgramStatus(GLuint ID);
-		std::vector<GLShaderVariable> _getVariables(GLenum type) const;
+		ShaderVariablesList _getVariables(GLenum type) const;
 
 		GLuint _programID;
 		GLuint _vertexShaderID;

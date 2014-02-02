@@ -7,6 +7,7 @@
 
 using namespace Good;
 
+#pragma region Constructors / Destructor
 Mesh::Mesh()
 {
 	glGenVertexArrays(1, &_vaoID);
@@ -17,7 +18,9 @@ Mesh::~Mesh()
 {
 	shutdown();
 }
+#pragma endregion
 
+#pragma region IRenderable Interface
 bool Mesh::init()
 {
 	if (_vertices.empty())
@@ -26,7 +29,6 @@ bool Mesh::init()
 	glBindVertexArray(_vaoID);
 
 	_createIndicesBufferData();
-	_matrixID = glGetUniformLocation(_glslProgram->programID(), "MVP");
 
 	glGenBuffers(1, &_vertexBufferID);
 	glBindBuffer(GL_ARRAY_BUFFER, _vertexBufferID);
@@ -41,16 +43,11 @@ bool Mesh::init()
 	return true;
 }
 
-float Mesh::render(const CameraPtr& camera)
+float Mesh::draw()
 {
 	clock_t time = clock();
 
 	glBindVertexArray(_vaoID);
-
-	glm::mat4 MVP = camera->projectionMatrix() * camera->viewMatrix() * _modelMatrix;
-
-	glUseProgram(_glslProgram->programID());
-	glUniformMatrix4fv(_matrixID, 1, GL_FALSE, &MVP[0][0]);
 
 	size_t offset = 0;
 	
@@ -77,6 +74,7 @@ float Mesh::render(const CameraPtr& camera)
 	glDrawElements(GL_TRIANGLES, (GLsizei)_indices.size(), GL_UNSIGNED_INT, (void*)0);
 
 	glDisableVertexAttribArray(0);
+	glBindVertexArray(0);
 
 	time = clock() - time;
 	return ((float)time) / CLOCKS_PER_SEC; 
@@ -86,7 +84,9 @@ bool Mesh::shutdown()
 {
 	return true;
 }
+#pragma endregion
 
+#pragma region Public Methods
 std::vector<Vertex> Mesh::vertices() const
 {
 	return _vertices;
@@ -101,18 +101,6 @@ unsigned int Mesh::addVertex(Vertex& vertex)
 	return vertex.indice;
 }
 
-void Mesh::setShaders(const char* vertexFile, const char* fragmentFile, const char* geometryFile /*= nullptr*/)
-{
-	glBindVertexArray(_vaoID);
-	setShaders(GLSLProgramPtr(new GLSLProgram(vertexFile, fragmentFile, geometryFile)));
-}
-
-void Mesh::setShaders(GLSLProgramPtr program)
-{
-	_glslProgram = program;
-	glBindVertexArray(0);
-}
-
 void Mesh::setPosition(const glm::vec3& position)
 {
 	_modelMatrix = glm::translate(glm::mat4(1.0), position);
@@ -125,6 +113,11 @@ void Mesh::setScale(const glm::vec3& scale)
 	_modelMatrix = glm::translate(_modelMatrix, glm::vec3(0.0));
 	_modelMatrix = glm::scale(_modelMatrix, scale);
 	_modelMatrix = glm::translate(_modelMatrix, position);
+}
+
+glm::mat4 Mesh::modelMatrix() const
+{
+	return _modelMatrix;
 }
 
 void Mesh::createTriangles(unsigned int tri1, unsigned int tri2, unsigned int tri3)
@@ -143,7 +136,9 @@ void Mesh::createTriangles(const Vertex& v1, const Vertex& v2, const Vertex& v3)
 	_indices.push_back(v2.indice);
 	_indices.push_back(v3.indice);
 }
+#pragma endregion
 
+#pragma region Private Methods
 std::vector<Vertex>::const_iterator Mesh::_findVertex(const Vertex& vertex)
 {
 	std::vector<Vertex>::const_iterator it = _vertices.begin();
@@ -184,3 +179,4 @@ void Mesh::_createIndicesBufferData()
 
 	_vertices = vertices;
 }
+#pragma endregion

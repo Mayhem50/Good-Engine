@@ -152,6 +152,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Camera.h" />
+    <ClInclude Include="FrameBufferObject.h" />
     <ClInclude Include="GLSLProgram.h" />
     <ClInclude Include="GoodFoundation.h" />
     <ClInclude Include="IRenderable.h" />
@@ -174,6 +175,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Camera.cpp" />
+    <ClCompile Include="FrameBufferObject.cpp" />
     <ClCompile Include="GLSLProgram.cpp" />
     <ClCompile Include="ISceneNode.cpp" />
     <ClCompile Include="LoaderObj.cpp" />

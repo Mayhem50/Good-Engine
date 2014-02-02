@@ -1,10 +1,13 @@
-﻿Build started 1/26/2014 8:12:10 PM.
+﻿Build started 2/2/2014 4:42:18 PM.
      1>Project "X:\DevGit\Good-Engine\Applications\GoodCore\Core\Core.vcxproj" on node 2 (Build target(s)).
      1>ClCompile:
-         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\x86_amd64\CL.exe /c /I"X:\ThirdParties\glew-1.10.0\include" /I"X:\ThirdParties\glfw-3.0.3\include" /I"X:\ThirdParties\glm-0.9.4.6\include" /Zi /nologo /W3 /WX- /Od /D WIN32 /D _DEBUG /D _LIB /D _UNICODE /D UNICODE /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"x64\Debug\\" /Fd"x64\Debug\vc120.pdb" /FR"x64\Debug\\" /Gd /TP /errorReport:prompt Mesh.cpp
-         Mesh.cpp
+         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\x86_amd64\CL.exe /c /I"X:\ThirdParties\glew-1.10.0\include" /I"X:\ThirdParties\glfw-3.0.3\include" /I"X:\ThirdParties\glm-0.9.4.6\include" /Zi /nologo /W3 /WX- /Od /D WIN32 /D _DEBUG /D _LIB /D _UNICODE /D UNICODE /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"x64\Debug\\" /Fd"x64\Debug\vc120.pdb" /FR"x64\Debug\\" /Gd /TP /errorReport:prompt GLSLProgram.cpp
+         GLSLProgram.cpp
+     1>GLSLProgram.cpp(150): warning C4800: 'GLint' : forcing value to bool 'true' or 'false' (performance warning)
+     1>GLSLProgram.cpp(169): warning C4800: 'GLint' : forcing value to bool 'true' or 'false' (performance warning)
        Lib:
          C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\x86_amd64\Lib.exe /OUT:"X:\DevGit\Good-Engine\build\x64\Debug\Core.lib" /NOLOGO /MACHINE:X64 x64\Debug\Camera.obj
+         x64\Debug\FrameBufferObject.obj
          x64\Debug\GLSLProgram.obj
          x64\Debug\ISceneNode.obj
          x64\Debug\LoaderObj.obj
@@ -18,9 +21,9 @@
          x64\Debug\Viewport.obj
          Core.vcxproj -> X:\DevGit\Good-Engine\build\x64\Debug\Core.lib
        BscMake:
-         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\bscmake.exe /nologo /o"X:\DevGit\Good-Engine\build\x64\Debug\Core.bsc" /n x64\Debug\Camera.sbr x64\Debug\GLSLProgram.sbr x64\Debug\ISceneNode.sbr x64\Debug\LoaderObj.sbr x64\Debug\LoadImage.sbr x64\Debug\LogConsole.sbr x64\Debug\LogFile.sbr x64\Debug\Mesh.sbr x64\Debug\Model.sbr x64\Debug\SceneManager.sbr x64\Debug\Vertex.sbr x64\Debug\Viewport.sbr
+         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\bscmake.exe /nologo /o"X:\DevGit\Good-Engine\build\x64\Debug\Core.bsc" /n x64\Debug\Camera.sbr x64\Debug\FrameBufferObject.sbr x64\Debug\GLSLProgram.sbr x64\Debug\ISceneNode.sbr x64\Debug\LoaderObj.sbr x64\Debug\LoadImage.sbr x64\Debug\LogConsole.sbr x64\Debug\LogFile.sbr x64\Debug\Mesh.sbr x64\Debug\Model.sbr x64\Debug\SceneManager.sbr x64\Debug\Vertex.sbr x64\Debug\Viewport.sbr
      1>Done Building Project "X:\DevGit\Good-Engine\Applications\GoodCore\Core\Core.vcxproj" (Build target(s)).
 
 Build succeeded.
 
-Time Elapsed 00:00:02.46
+Time Elapsed 00:00:02.61

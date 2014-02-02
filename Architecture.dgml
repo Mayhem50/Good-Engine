@@ -37,7 +37,7 @@
     <Node Id="@5" Category="CodeSchema_Namespace" Bounds="-6.27224596119919,133.26588878127,111.84,25" CodeSchemaProperty_IsExternal="True" DelayedChildNodesState="NotFetched" DelayedCrossGroupLinksState="Fetched" Group="Collapsed" Label="glm‎::detail" Language="{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}" />
     <Node Id="@7" Category="CodeSchema_Namespace" Bounds="-381.549787197854,-651.57463809396,861.347657218122,699.840524363869" DelayedChildNodesState="Fetched" DelayedCrossGroupLinksState="Fetched" FetchedChildrenCount="20" Group="Expanded" Label="Good" Language="{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}" UseManualLocation="True" />
     <Node Id="@8" Category="CodeSchema_Namespace" Bounds="16.2868086609163,78.26588832047,73.2266666666667,25" CodeSchemaProperty_IsExternal="True" DelayedChildNodesState="NotFetched" DelayedCrossGroupLinksState="Fetched" Group="Collapsed" Label="std" Language="{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}" />
-    <Node Id="@9" Category="CodeSchema_TypeDef" Bounds="325.232572382197,-238.284207260023,134.653333333333,26" DelayedCrossGroupLinksState="Fetched" Label="GLShaderVariable" Language="{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}" />
+    <Node Id="@9" Category="CodeSchema_TypeDef" Bounds="325.232572382197,-238.284207260023,134.653333333333,26" DelayedCrossGroupLinksState="Fetched" Label="ShaderVariable" Language="{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}" />
   </Nodes>
   <Links>
     <Link Source="@10" Target="@3" Category="References" IsSourceVirtualized="True" IsTargetVirtualized="True" Weight="10">
@@ -248,7 +248,7 @@
     <Alias n="6" Id="Namespace=Good" />
     <Alias n="7" Id="(@1 @6)" />
     <Alias n="8" Id="(@1 Namespace=std)" />
-    <Alias n="9" Id="(@1 @6 Type=GLShaderVariable)" />
+    <Alias n="9" Id="(@1 @6 Type=ShaderVariable)" />
     <Alias n="10" Id="(@1 @6 Type=GLSLProgram)" />
     <Alias n="11" Id="(@1 @6 Type=ILight)" />
     <Alias n="12" Id="(@1 @6 Type=ILoader)" />

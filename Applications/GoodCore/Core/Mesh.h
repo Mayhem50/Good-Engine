@@ -17,17 +17,17 @@ namespace Good
 		~Mesh();
 
 		virtual bool init();
-		virtual float render(const CameraPtr& camera);
+		virtual float draw();
 		virtual bool shutdown();
+#pragma endregion
 
 		VerticesList vertices() const;
 		unsigned int addVertex(Vertex& vertex);
-
-		void setShaders(const char* vertexFile, const char* fragmentFile, const char* geometryFile = nullptr);
-		void setShaders(GLSLProgramPtr proram);
-		
+				
 		void setPosition(const glm::vec3& position);
 		void setScale(const glm::vec3& scale);
+
+		glm::mat4 modelMatrix() const;
 
 		void createTriangles(unsigned int tri1, unsigned int tri2, unsigned int tri3);
 		void createTriangles(const Vertex& v1, const Vertex& v2, const Vertex& v3);
@@ -48,7 +48,6 @@ namespace Good
 		GLuint _vaoID;
 		GLuint _vertexBufferID;
 		GLuint _indicesBufferID;
-		GLuint _matrixID;
 
 		GLSLProgramPtr _glslProgram;
 	};
