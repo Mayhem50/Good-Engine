@@ -11,7 +11,7 @@
 
 namespace Good
 {	
-	class ISceneNode;	
+	class GOOD_DLL ISceneNode;
 	typedef std::shared_ptr<ISceneNode> ISceneNodePtr;
 	typedef std::map<std::string, ISceneNodePtr> ISceneNodeList;
 
@@ -30,7 +30,7 @@ namespace Good
 	public:
 		ISceneNode(const std::string& name, const ISceneNodePtr& parent);
 
-		ISceneNode* createChild(const glm::vec3& translate = nullVec3, const glm::quat& rotate = identityQuat);
+		ISceneNodePtr createChild(const glm::vec3& translate = nullVec3, const glm::quat& rotate = identityQuat);
 		bool addChild(const ISceneNodePtr& child);
 		bool removeChild(const ISceneNodePtr& child);
 		bool removeAllChilds();
@@ -62,7 +62,7 @@ namespace Good
 		void setOrientation(double w, double x, double y, double z);
 		glm::quat orientation() const;
 
-		glm::mat3 localMatrix() const;
+		glm::mat4 localMatrix() const;
 
 		 std::string getName();
 

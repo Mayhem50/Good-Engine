@@ -4,7 +4,7 @@
 
 namespace Good
 {
-	class ILight: public ISceneNode
+	class GOOD_DLL ILight : public ISceneNode
 	{
 	public:
 		enum Type
@@ -17,7 +17,7 @@ namespace Good
 		ILight(const std::string& name, const ISceneNodePtr& parent, Type type):
 			ISceneNode(name, parent), _type(type), _color(0){}
 
-		void setColor(const glm::vec3& color)
+		void setColor(const glm::vec4& color)
 		{
 			_color = color;
 		}
@@ -27,20 +27,23 @@ namespace Good
 			_color.r = red;
 			_color.g = green;
 			_color.b = blue;
+			_color.a = alpha;
 		}
 
-		const glm::vec3 getColor() const
+		const glm::vec4 color() const
 		{
 			return _color;
 		}
 
-		glm::vec3& getColor()
+		glm::vec4& color()
 		{
 			return _color;
 		}
 
 	private:
-		glm::vec3 _color;
+		glm::vec4 _color;
+		float _power;
+
 		Type _type;
 	};
 }

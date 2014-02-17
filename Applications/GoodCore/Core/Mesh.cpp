@@ -3,12 +3,11 @@
 #include <algorithm>
 #include <time.h>
 
-#include <glm/gtc/matrix_transform.hpp>
-
 using namespace Good;
 
 #pragma region Constructors / Destructor
-Mesh::Mesh()
+Mesh::Mesh(const std::string& name, const ISceneNodePtr& parent):
+ISceneNode(name, parent)
 {
 	glGenVertexArrays(1, &_vaoID);
 }
@@ -47,6 +46,9 @@ float Mesh::draw()
 {
 	clock_t time = clock();
 
+	if (_material)
+		_material->use();
+
 	glBindVertexArray(_vaoID);
 
 	size_t offset = 0;
@@ -54,18 +56,16 @@ float Mesh::draw()
 	glEnableVertexAttribArray(0);
 	glBindBuffer(GL_ARRAY_BUFFER, _vertexBufferID);
 	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)offset);
-
 	offset += sizeof(_vertices[0].position);
 	glEnableVertexAttribArray(1);
 	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)offset);
-
 	offset += sizeof(_vertices[0].color);
 	glEnableVertexAttribArray(2);
-	glVertexAttribPointer(2, 3, GL_FLOAT, GL_FALSE, 0, (void*)offset);
-
+	glVertexAttribPointer(2, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)offset);
 	offset += sizeof(_vertices[0].normal);
 	glEnableVertexAttribArray(3);
-	glVertexAttribPointer(3, 2, GL_FLOAT, GL_FALSE, 0, (void*)offset);
+	glVertexAttribPointer(3, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)offset);
+
 
 	glEnable(GL_DEPTH_TEST);
 	glDepthFunc(GL_LESS);
@@ -87,7 +87,7 @@ bool Mesh::shutdown()
 #pragma endregion
 
 #pragma region Public Methods
-std::vector<Vertex> Mesh::vertices() const
+VerticesList Mesh::vertices() const
 {
 	return _vertices;
 }
@@ -96,28 +96,8 @@ unsigned int Mesh::addVertex(Vertex& vertex)
 {
 	vertex.indice = (unsigned int)_vertices.size();
 	_vertices.push_back(vertex);
-	//_indices.push_back(vertex->indice);	
 
 	return vertex.indice;
-}
-
-void Mesh::setPosition(const glm::vec3& position)
-{
-	_modelMatrix = glm::translate(glm::mat4(1.0), position);
-}
-
-void Mesh::setScale(const glm::vec3& scale)
-{
-	glm::vec3 position(_modelMatrix[3][0], _modelMatrix[3][1], _modelMatrix[3][2]);
-
-	_modelMatrix = glm::translate(_modelMatrix, glm::vec3(0.0));
-	_modelMatrix = glm::scale(_modelMatrix, scale);
-	_modelMatrix = glm::translate(_modelMatrix, position);
-}
-
-glm::mat4 Mesh::modelMatrix() const
-{
-	return _modelMatrix;
 }
 
 void Mesh::createTriangles(unsigned int tri1, unsigned int tri2, unsigned int tri3)
@@ -129,19 +109,21 @@ void Mesh::createTriangles(unsigned int tri1, unsigned int tri2, unsigned int tr
 
 void Mesh::createTriangles(const Vertex& v1, const Vertex& v2, const Vertex& v3)
 {	
-	/*if (!v1 || !v2 || !v3)
-		return;*/
-
 	_indices.push_back(v1.indice);
 	_indices.push_back(v2.indice);
 	_indices.push_back(v3.indice);
 }
+
+void Mesh::setMaterial(MaterialPtr material)
+{
+	_material = material;
+}
 #pragma endregion
 
 #pragma region Private Methods
-std::vector<Vertex>::const_iterator Mesh::_findVertex(const Vertex& vertex)
+VerticesList::const_iterator Mesh::_findVertex(const Vertex& vertex)
 {
-	std::vector<Vertex>::const_iterator it = _vertices.begin();
+	VerticesList::const_iterator it = _vertices.begin();
 
 	for (; it != _vertices.end(); ++it)
 		if ((*it) == vertex)
@@ -158,7 +140,8 @@ void Mesh::_createIndicesBufferData()
 	for (; it != _vertices.end(); ++it)
 	{
 		Vertex vertex;
-			VerticesList::const_iterator newIt = vertices.begin();
+		VerticesList::const_iterator newIt = vertices.begin();
+
 		for (; newIt != vertices.end(); ++newIt)
 		{
 			if ((*it) == (*newIt))
@@ -178,5 +161,51 @@ void Mesh::_createIndicesBufferData()
 	}
 
 	_vertices = vertices;
+	_orienteTriangles();
+}
+
+void Mesh::_orienteTriangles()
+{
+	std::vector<unsigned int>::const_iterator it = _indices.begin();
+	std::vector<unsigned int> newList;
+
+	for (; it != _indices.end(); ++it)
+	{
+		unsigned int id1 = *it;
+		++it;
+		unsigned int id2 = *it;
+		++it;
+		unsigned int id3 = *it;
+
+		Vertex v1 = _vertices[id1];
+		Vertex v2 = _vertices[id2];
+		Vertex v3 = _vertices[id3];
+
+		glm::vec3 edge1 = v2.position - v1.position;
+		glm::normalize(edge1);
+		glm::vec3 edge2 = v3.position - v1.position;
+		glm::normalize(edge2);
+
+		glm::vec3 normal = glm::cross(edge1, edge2);
+		normal = glm::normalize(normal);
+		glm::vec3 tan = glm::cross(normal, edge1);
+		tan = glm::normalize(tan);
+		float cosT = glm::dot<float>(edge2, tan);
+
+		if (cosT > 0)
+		{
+			newList.push_back(id1);
+			newList.push_back(id2);
+			newList.push_back(id3);
+		}
+		else
+		{
+			newList.push_back(id1);
+			newList.push_back(id3);
+			newList.push_back(id2);
+		}
+	}
+
+	_indices = newList;
 }
 #pragma endregion

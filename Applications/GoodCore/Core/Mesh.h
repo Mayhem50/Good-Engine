@@ -1,19 +1,22 @@
 #pragma once
 
-#include "Vertex.h"
-#include "GLSLProgram.h"
 #include "IRenderable.h"
+#include "ISceneNode.h"
+
+#include "Vertex.h"
+#include "Material.h"
 
 #include <GL\glew.h>
 
 #include <vector>
+#include <memory>
 
 namespace Good
 {
-	class Mesh : public IRenderable
+	class GOOD_DLL Mesh : public ISceneNode, public IRenderable
 	{
 	public:
-		Mesh();
+		Mesh(const std::string& name, const ISceneNodePtr& parent);
 		~Mesh();
 
 		virtual bool init();
@@ -23,14 +26,11 @@ namespace Good
 
 		VerticesList vertices() const;
 		unsigned int addVertex(Vertex& vertex);
-				
-		void setPosition(const glm::vec3& position);
-		void setScale(const glm::vec3& scale);
-
-		glm::mat4 modelMatrix() const;
 
 		void createTriangles(unsigned int tri1, unsigned int tri2, unsigned int tri3);
 		void createTriangles(const Vertex& v1, const Vertex& v2, const Vertex& v3);
+
+		void setMaterial(MaterialPtr material);
 
 	private:
 		void _createVertexBufferData();
@@ -38,17 +38,21 @@ namespace Good
 		void _createUVBufferData();
 		void _createNormalBufferData();
 		void _createIndicesBufferData();
+		void _orienteTriangles();
 
 		VerticesList::const_iterator _findVertex(const Vertex& vertex);
 
 		std::vector<unsigned int> _indices;
 		VerticesList _vertices;
-		glm::mat4 _modelMatrix;
+		EdgesList _edges;
+		TrianglesList _triangles;
 
 		GLuint _vaoID;
 		GLuint _vertexBufferID;
 		GLuint _indicesBufferID;
 
-		GLSLProgramPtr _glslProgram;
+		MaterialPtr _material;
 	};
+
+	typedef std::shared_ptr<Mesh> MeshPtr;
 }

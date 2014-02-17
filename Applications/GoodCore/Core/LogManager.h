@@ -9,12 +9,12 @@ namespace Good
 	class LogManager : public Singleton<LogManager>
 	{
 	public:
-		ILogger* LoggerToFile(const char* fileName = "./log.txt")
+		ILoggerPtr LoggerToFile(const char* fileName = "./log.txt")
 		{
 			return new LogFile(fileName);
 		}
 
-		ILogger* LoggerToConsole()
+		ILoggerPtr LoggerToConsole()
 		{
 			return new LogConsole();
 		}

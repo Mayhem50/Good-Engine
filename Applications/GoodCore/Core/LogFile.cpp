@@ -18,7 +18,7 @@ LogFile::~LogFile(void)
 	delete[] _fileName;
 }
 
-bool LogFile::write(const std::string str) const
+bool LogFile::write(const std::string& str, const GoodObject* object) const
 {
 	std::ofstream file;
 	file.open(_fileName, std::ios::out | std::ios::app);
@@ -34,6 +34,9 @@ bool LogFile::write(const std::string str) const
 		asctime_s(buffer, timeInfo);
 		std::string newStr(buffer);
 		newStr.replace(newStr.find_first_of("\n") , 1, "\0");
+
+		if (object)
+			file << typeid(*object).name() << " send ";
 
 		file << newStr << ": " << str << std::endl;
 

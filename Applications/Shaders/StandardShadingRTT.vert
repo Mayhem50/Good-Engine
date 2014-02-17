@@ -1,4 +1,4 @@
-#version 330 core
+#version 430 core
 
 // Input vertex data, different for all executions of this shader.
 layout(location = 0) in vec3 vertexPosition_modelspace;
@@ -17,6 +17,13 @@ uniform mat4 MVP;
 uniform mat4 V;
 uniform mat4 M;
 uniform vec3 LightPosition_worldspace;
+
+out gl_PerVertex
+{
+	vec4 gl_Position;
+	float gl_PointSize;
+	float gl_ClipDistance[];
+};
 
 void main(){
 

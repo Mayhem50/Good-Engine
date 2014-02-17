@@ -3,6 +3,8 @@
 #include <utility>
 #include <random>
 
+#include <glm/gtc/matrix_transform.hpp>
+
 using namespace Good;
 
 ISceneNode::ISceneNode(const std::string& name, const ISceneNodePtr& parent):
@@ -10,6 +12,10 @@ _name(name), _parent(parent), _inherit(true)
 {
 	if (_name.empty())
 		_name = NameTools::nameGenerator();
+
+	_scale = glm::vec3(1.0);
+	_position = glm::vec3(0.0);
+	_orientation = glm::normalize(_orientation);
 }
 
 bool ISceneNode::addChild(const ISceneNodePtr& child)
@@ -192,14 +198,13 @@ glm::quat ISceneNode::orientation() const
 	return _orientation;
 }
 
-
-glm::mat3 ISceneNode::localMatrix() const
+glm::mat4 ISceneNode::localMatrix() const
 {
-	glm::vec3 xAxis = _orientation * glm::vec3(1.0, 0.0, 0.0);
-	glm::vec3 yAxis = _orientation * glm::vec3(0.0, 1.0, 0.0);
-	glm::vec3 zAxis = _orientation * glm::vec3(0.0, 0.0, 1.0);
+	glm::mat4 orientationMatrix = glm::mat4_cast(_orientation);
+	glm::mat4 scaleMatrix = glm::scale(glm::mat4(1.0), _scale);
+	glm::mat4 translationMatrix = glm::translate(glm::mat4(1.0), _position);
 
-	return glm::mat3(xAxis, yAxis, zAxis);
+	return translationMatrix * orientationMatrix * scaleMatrix;
 }
 
 glm::vec3 ISceneNode::derivedPosition()

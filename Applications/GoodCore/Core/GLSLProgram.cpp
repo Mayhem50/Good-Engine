@@ -1,11 +1,19 @@
 #include "GLSLProgram.h"
 
+#ifdef _DEBUG
+#include "LogConsole.h"
+#endif
+
 #include <fstream>
 
 using namespace Good;
 
 GLSLProgram::GLSLProgram(const char* vertexFile, const char* fragmentFile, const char* geometryFile)
 {
+#ifdef _DEBUG
+	_logger = ILoggerPtr(new LogConsole);
+	_logger->write("Create", this);
+#endif
 	_programID = 0;
 	_vertexShaderID = 0;
 	_fragmentShaderID = 0;
@@ -14,7 +22,7 @@ GLSLProgram::GLSLProgram(const char* vertexFile, const char* fragmentFile, const
 
 	if (vertexFile == NULL || fragmentFile == NULL)
 	{
-		_error = "Missing VertexShader File and/or fragmentShader File";
+		_log = "Missing VertexShader File and/or fragmentShader File";
 		return;
 	}
 
@@ -41,11 +49,9 @@ GLSLProgram::GLSLProgram(const char* vertexFile, const char* fragmentFile, const
 
 	glLinkProgram(_programID);
 
-	if (!_checkProgramStatus(_programID))
-		_isValid = false;
-
-	_isValid = true;
-
+	if (_checkProgramStatus(_programID))
+		_isValid = true;
+	
 	glDeleteShader(_vertexShaderID);
 	glDeleteShader(_fragmentShaderID);
 	if (geometryFile != NULL)
@@ -87,9 +93,9 @@ ShaderVariablesList GLSLProgram::attributes() const
 	return _getVariables(GL_ACTIVE_ATTRIBUTES);
 }
 
-std::string GLSLProgram::error() const
+std::string GLSLProgram::log() const
 {
-	return _error;
+	return _log;
 }
 
 bool GLSLProgram::isValid() const
@@ -99,6 +105,29 @@ bool GLSLProgram::isValid() const
 
 GLuint GLSLProgram::_createShader(const char* file, std::string& code, GLenum shaderType)
 {
+#ifdef _DEBUG
+	std::string type;
+	switch (shaderType)
+	{
+	case GL_VERTEX_SHADER:
+		type = "VERTEX_SHADER";
+		break;
+	case GL_FRAGMENT_SHADER:
+		type = "FRAGMENT_SHADER";
+		break;
+	case GL_GEOMETRY_SHADER:
+		type = "GEOMETRY_SHADER";
+		break;
+	case GL_TESS_CONTROL_SHADER:
+		type = "TESS_CONTROL_SHADER";
+		break;
+	case GL_TESS_EVALUATION_SHADER:
+		type = "TESS_EVALUATION_SHADER";
+		break;
+	}
+	_logger->write("Create Shader: " + type, this);
+#endif
+
 	if (file == NULL)
 		return 0;
 
@@ -114,16 +143,16 @@ GLuint GLSLProgram::_createShader(const char* file, std::string& code, GLenum sh
 
 		stream.close();
 	}
-	else
-	{
-		printf("Error openning %s\n", file);
-	}
 
 	return shaderID;
 }
 
 bool GLSLProgram::_compileShader(GLuint shaderID, std::string& code)
 {
+#ifdef _DEBUG
+	_logger->write("Compile Shader", this);
+#endif
+
 	char const * sourcePointer = code.c_str();
 	glShaderSource(shaderID, 1, &sourcePointer, NULL);
 	glCompileShader(shaderID);
@@ -141,10 +170,14 @@ bool GLSLProgram::_checkShaderStatus(GLuint ID)
 
 	if (infoLogLenght > 0)
 	{
-		char* shaderErrorMessage = new char[infoLogLenght + 1];
-		glGetShaderInfoLog(ID, infoLogLenght, NULL, shaderErrorMessage);
+		char* shaderMessage = new char[infoLogLenght + 1];
+		glGetShaderInfoLog(ID, infoLogLenght, NULL, shaderMessage);
 
-		_error += shaderErrorMessage + '\n';
+#ifdef _DEBUG
+		_logger->write("Check Shader Status:\n\t" + std::string(shaderMessage), this);
+#endif
+
+		_log += shaderMessage + '\n';
 	}
 
 	return (bool)result;
@@ -160,10 +193,14 @@ bool GLSLProgram::_checkProgramStatus(GLuint ID)
 
 	if (infoLogLenght > 0)
 	{
-		char* shaderErrorMessage = new char[infoLogLenght + 1];
-		glGetProgramInfoLog(ID, infoLogLenght, NULL, shaderErrorMessage);
+		char* shaderMessage = new char[infoLogLenght + 1];
+		glGetProgramInfoLog(ID, infoLogLenght, NULL, shaderMessage);
 
-		_error += shaderErrorMessage + '\n';
+#ifdef _DEBUG
+		_logger->write("Check Program Status:\n\t" + std::string(shaderMessage), this);
+#endif
+
+		_log += shaderMessage + '\n';
 	}
 
 	return (bool)result;
@@ -171,6 +208,20 @@ bool GLSLProgram::_checkProgramStatus(GLuint ID)
 
 ShaderVariablesList GLSLProgram::_getVariables(GLenum type) const
 {
+#ifdef _DEBUG
+	std::string varType;
+	switch (type)
+	{
+	case GL_ACTIVE_UNIFORMS:
+		varType = "ACTIVE_UNIFORMS";
+		break;
+	case GL_ACTIVE_ATTRIBUTES:
+		varType = "ACTIVE_ATTRIBUTES";
+		break;
+	}
+	_logger->write("Get Shader Variables: " + varType, this);
+#endif
+
 	ShaderVariablesList list;
 	int count = 0;
 	glGetProgramiv(_programID, type, &count);

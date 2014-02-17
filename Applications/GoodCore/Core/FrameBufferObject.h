@@ -1,12 +1,14 @@
 #pragma once
 
+#include "GoodFoundation.h"
+
 #include <GL\glew.h>
 
 #include <memory>
 
 namespace Good
 {
-	class FrameBufferObject
+	class GOOD_DLL FrameBufferObject
 	{
 	public:
 		FrameBufferObject();

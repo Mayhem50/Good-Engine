@@ -1,10 +1,12 @@
 #pragma once
 
+#include "GoodFoundation.h"
+
 #include <memory>
 
 namespace Good
 {
-	class Viewport
+	class GOOD_DLL Viewport
 	{
 	public:
 		Viewport();

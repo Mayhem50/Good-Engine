@@ -4,9 +4,6 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 VisualStudioVersion = 12.0.21005.1
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "GoodCore", "GoodCore", "{77AA3A71-F6B9-48A7-BFAC-B44130E04926}"
-	ProjectSection(SolutionItems) = preProject
-		Architecture.dgml = Architecture.dgml
-	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Logger", "Applications\Tools\Logger\Logger.vcxproj", "{5EDC5EAE-0A57-4605-B1EA-1DEBC8F1CAE3}"
 EndProject
@@ -18,18 +15,16 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Validation", "Applications\
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Shaders", "Shaders", "{4154FF64-9601-47E9-A633-05AB499B2708}"
 	ProjectSection(SolutionItems) = preProject
-		Applications\Shaders\ColorFragmentShader.glsl = Applications\Shaders\ColorFragmentShader.glsl
-		Applications\Shaders\Passthrough.vertexshader = Applications\Shaders\Passthrough.vertexshader
-		Applications\Shaders\SimpleFragmentShader.fragmentshader = Applications\Shaders\SimpleFragmentShader.fragmentshader
-		Applications\Shaders\SimpleFragmentShader.glsl = Applications\Shaders\SimpleFragmentShader.glsl
-		Applications\Shaders\SimpleTexture.fragmentshader = Applications\Shaders\SimpleTexture.fragmentshader
-		Applications\Shaders\SimpleTransform.glsl = Applications\Shaders\SimpleTransform.glsl
-		Applications\Shaders\SimpleVertexShader.glsl = Applications\Shaders\SimpleVertexShader.glsl
-		Applications\Shaders\SimpleVertexShader.vertexshader = Applications\Shaders\SimpleVertexShader.vertexshader
-		Applications\Shaders\SingleColor.glsl = Applications\Shaders\SingleColor.glsl
-		Applications\Shaders\StandardShadingRTT.fragmentshader = Applications\Shaders\StandardShadingRTT.fragmentshader
-		Applications\Shaders\StandardShadingRTT.vertexshader = Applications\Shaders\StandardShadingRTT.vertexshader
-		Applications\Shaders\TransformVertexShader.glsl = Applications\Shaders\TransformVertexShader.glsl
+		Applications\Shaders\ColorFragmentShader.frag = Applications\Shaders\ColorFragmentShader.frag
+		Applications\Shaders\Passthrough.vert = Applications\Shaders\Passthrough.vert
+		Applications\Shaders\SimpleFragmentShader.frag = Applications\Shaders\SimpleFragmentShader.frag
+		Applications\Shaders\SimpleTexture.frag = Applications\Shaders\SimpleTexture.frag
+		Applications\Shaders\SimpleTransform.vert = Applications\Shaders\SimpleTransform.vert
+		Applications\Shaders\SimpleVertexShader.vert = Applications\Shaders\SimpleVertexShader.vert
+		Applications\Shaders\SingleColor.frag = Applications\Shaders\SingleColor.frag
+		Applications\Shaders\StandardShadingRTT.frag = Applications\Shaders\StandardShadingRTT.frag
+		Applications\Shaders\StandardShadingRTT.vert = Applications\Shaders\StandardShadingRTT.vert
+		Applications\Shaders\TransformVertexShader.vert = Applications\Shaders\TransformVertexShader.vert
 	EndProjectSection
 EndProject
 Global

@@ -2,7 +2,7 @@
 
 namespace Good
 {
-	class Texture
+	class GOOD_DLL Texture
 	{
 
 	};

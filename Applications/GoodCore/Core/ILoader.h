@@ -1,13 +1,13 @@
 #pragma once
 
 #include "GoodFoundation.h"
-#include "Model.h"
+#include "Mesh.h"
 
 namespace Good
 {
 	class GOOD_DLL ILoader
 	{
 	public:
-		virtual ModelPtr load(const char* file) = 0;
+		virtual MeshPtr load(const char* file) = 0;
 	};
 }

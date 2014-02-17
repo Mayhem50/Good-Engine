@@ -1,17 +1,12 @@
 #pragma once
 
+#include "GoodFoundation.h"
+
 #include "Camera.h"
-#include "FrameBufferObject.h"
 
 namespace Good
 {
-	struct RenderResources
-	{
-		CameraPtr camera;
-		FrameBufferObjectPtr fbo;
-	};
-
-	class IRenderable
+	class GOOD_DLL IRenderable
 	{
 	public:
 		virtual ~IRenderable(){}

@@ -1,5 +1,7 @@
 #pragma once
 
+#pragma pack(push, 0)
+
 #include "GoodFoundation.h"
 #include "IRenderable.h"
 
@@ -7,7 +9,7 @@
 #include <vector>
 
 namespace Good{
-	struct Vertex
+	struct GOOD_DLL Vertex
 	{
 		Vertex(void);
 		~Vertex(void);
@@ -33,5 +35,28 @@ namespace Good{
 
 	typedef std::shared_ptr<Vertex> VertexPtr;
 	typedef std::vector<Vertex> VerticesList;
+
+	struct Edge
+	{
+		VertexPtr v1;
+		VertexPtr v2;
+	};
+
+	typedef std::shared_ptr<Edge> EdgePtr;
+	typedef std::vector<Edge> EdgesList;
+
+	struct Triangle
+	{
+		VertexPtr v1;
+		VertexPtr v2;
+		VertexPtr v3;
+
+		EdgePtr e1;
+		EdgePtr e2;
+		EdgePtr e3;
+	};
+
+	typedef std::shared_ptr<Triangle> TrianglePtr;
+	typedef std::vector<Triangle> TrianglesList;
 }
 

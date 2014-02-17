@@ -71,16 +71,20 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <OutDir>$(SolutionDir)build\$(Configuration)\</OutDir>
+    <OutDir>$(SolutionDir)build\$(Platform)\$(Configuration)\</OutDir>
+    <IntDir>$(SolutionDir)build\$(Platform)\$(Configuration)\Intermediate\</IntDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <OutDir>$(SolutionDir)build\$(Platform)\$(Configuration)\</OutDir>
+    <IntDir>$(SolutionDir)build\$(Platform)\$(Configuration)\Intermediate\</IntDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
-    <OutDir>$(SolutionDir)build\$(Configuration)\</OutDir>
+    <OutDir>$(SolutionDir)build\$(Platform)\$(Configuration)\</OutDir>
+    <IntDir>$(SolutionDir)build\$(Platform)\$(Configuration)\Intermediate\</IntDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <OutDir>$(SolutionDir)build\$(Platform)\$(Configuration)\</OutDir>
+    <IntDir>$(SolutionDir)build\$(Platform)\$(Configuration)\Intermediate\</IntDir>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -104,6 +108,7 @@
       <PreprocessorDefinitions>WIN32;_DEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <BrowseInformation>true</BrowseInformation>
       <StructMemberAlignment>Default</StructMemberAlignment>
+      <CompileAs>Default</CompileAs>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -152,7 +157,9 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Camera.h" />
+    <ClInclude Include="CameraMotion.h" />
     <ClInclude Include="FrameBufferObject.h" />
+    <ClInclude Include="GLSLPipeline.h" />
     <ClInclude Include="GLSLProgram.h" />
     <ClInclude Include="GoodFoundation.h" />
     <ClInclude Include="IRenderable.h" />
@@ -165,9 +172,12 @@
     <ClInclude Include="LogConsole.h" />
     <ClInclude Include="LogFile.h" />
     <ClInclude Include="LogManager.h" />
+    <ClInclude Include="Material.h" />
     <ClInclude Include="Mesh.h" />
-    <ClInclude Include="Model.h" />
     <ClInclude Include="SceneManager.h" />
+    <ClInclude Include="ShaderProgram.h" />
+    <ClInclude Include="ShadersManager.h" />
+    <ClInclude Include="ShaderTools.h" />
     <ClInclude Include="Singleton.h" />
     <ClInclude Include="Texture.h" />
     <ClInclude Include="Vertex.h" />
@@ -175,21 +185,23 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Camera.cpp" />
+    <ClCompile Include="CameraMotion.cpp" />
     <ClCompile Include="FrameBufferObject.cpp" />
+    <ClCompile Include="GLSLPipeline.cpp" />
     <ClCompile Include="GLSLProgram.cpp" />
+    <ClCompile Include="GoodObject.h" />
     <ClCompile Include="ISceneNode.cpp" />
     <ClCompile Include="LoaderObj.cpp" />
     <ClCompile Include="LoadImage.cpp" />
     <ClCompile Include="LogConsole.cpp" />
     <ClCompile Include="LogFile.cpp" />
+    <ClCompile Include="Material.cpp" />
     <ClCompile Include="Mesh.cpp" />
-    <ClCompile Include="Model.cpp" />
     <ClCompile Include="SceneManager.cpp" />
+    <ClCompile Include="ShaderProgram.cpp" />
+    <ClCompile Include="ShaderTools.cpp" />
     <ClCompile Include="Vertex.cpp" />
     <ClCompile Include="Viewport.cpp" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="..\..\..\Architecture.dgml" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

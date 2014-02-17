@@ -9,7 +9,7 @@ namespace Good
 	public:
 		LogConsole();
 		virtual ~LogConsole(void);
-		virtual bool write(const std::string str) const;
+		virtual bool write(const std::string& str, const GoodObject* object = nullptr) const;
 	};
 }
 

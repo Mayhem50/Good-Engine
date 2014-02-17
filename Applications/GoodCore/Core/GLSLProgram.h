@@ -1,6 +1,11 @@
 #pragma once
 
 #include "GoodFoundation.h"
+#include "GoodObject.h"
+
+#ifdef _DEBUG
+#include "Ilogger.h"
+#endif
 
 #include <vector>
 #include <tuple>
@@ -14,7 +19,8 @@ namespace Good
 {
 	typedef std::tuple<std::string, GLenum> ShaderVariable;
 	typedef std::vector<ShaderVariable> ShaderVariablesList;
-	class GOOD_DLL GLSLProgram
+
+	class GOOD_DLL GLSLProgram : public GoodObject
 	{
 	public:
 		GLSLProgram(const char* vertexFile, const char* fragmentFile, const char* geometryFile = NULL);
@@ -28,7 +34,7 @@ namespace Good
 		ShaderVariablesList uniforms() const;
 		ShaderVariablesList attributes() const;
 
-		std::string error() const;
+		std::string log() const;
 
 		bool isValid() const;
 
@@ -46,7 +52,11 @@ namespace Good
 
 		bool _isValid;
 
-		std::string _error;
+		std::string _log;
+
+#ifdef _DEBUG
+		ILoggerPtr _logger;
+#endif
 	};
 
 	typedef std::shared_ptr<GLSLProgram> GLSLProgramPtr;

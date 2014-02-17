@@ -1,13 +1,19 @@
 #pragma once
 
+#include "GoodObject.h"
+
 #include "Viewport.h"
+
+#ifdef _DEBUG
+#include "ILogger.h"
+#endif
 
 #include <memory>
 #include <glm\glm.hpp>
 
 namespace Good
 {
-	class Camera
+	class GOOD_DLL Camera : public GoodObject
 	{
 	public:
 		enum CAMERA_TYPE
@@ -17,7 +23,7 @@ namespace Good
 		};
 
 		Camera(const ViewportPtr& viewport);
-		~Camera();
+		virtual ~Camera();
 
 		void setType(CAMERA_TYPE type);
 		CAMERA_TYPE type() const;
@@ -58,6 +64,10 @@ namespace Good
 		CAMERA_TYPE _type;
 
 		ViewportPtr _viewport;
+
+#ifdef _DEBUG
+		ILoggerPtr _logger;
+#endif
 	};
 
 	typedef std::shared_ptr<Camera> CameraPtr;
