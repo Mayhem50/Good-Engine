@@ -1,7 +1,5 @@
 #pragma once
 
-#pragma pack(push, 0)
-
 #include "GoodFoundation.h"
 #include "IRenderable.h"
 
@@ -9,6 +7,10 @@
 #include <vector>
 
 namespace Good{
+	struct Triangle;
+	typedef std::shared_ptr<Triangle> TrianglePtr;
+	typedef std::vector<TrianglePtr> TrianglesList;
+
 	struct GOOD_DLL Vertex
 	{
 		Vertex(void);
@@ -20,6 +22,8 @@ namespace Good{
 		glm::vec2 uv;
 
 		unsigned int indice;
+
+		TrianglesList triangles;
 
 		bool operator==(const Vertex& vertex) const;
 		bool operator!=(const Vertex& vertex) const;
@@ -43,20 +47,16 @@ namespace Good{
 	};
 
 	typedef std::shared_ptr<Edge> EdgePtr;
-	typedef std::vector<Edge> EdgesList;
+	typedef std::vector<EdgePtr> EdgesList;
 
 	struct Triangle
 	{
-		VertexPtr v1;
-		VertexPtr v2;
-		VertexPtr v3;
+		Vertex* v1;
+		Vertex* v2;
+		Vertex* v3;
 
-		EdgePtr e1;
-		EdgePtr e2;
-		EdgePtr e3;
+		glm::vec3 normal;
+		glm::vec3 tangente;
 	};
-
-	typedef std::shared_ptr<Triangle> TrianglePtr;
-	typedef std::vector<Triangle> TrianglesList;
 }
 

@@ -1,33 +1,26 @@
-#version 430 core
+#version 420 core
 
-// Input vertex data, different for all executions of this shader.
-
-//layout(location = 0) in vec3 vertexPosition;
-//layout(location = 1) in vec3 vertexColor;
-//layout(location = 2) in vec3 vertexNormal;
-
-struct VertexData
-{
-	vec3 position;
-	vec3 color;
-	vec3 normal;
-	vec2 uv;
-};
-
-in VertexData data;
+layout (location = 0) in vec3 position;
+layout (location = 1) in vec3 color;
+layout (location = 2) in vec3 normal;
+layout (location = 3) in vec2 uv;
 
 layout (std140, binding = 0) uniform WorldDataBlock
 {
 	mat4 modelMatrix;
 	mat4 viewMatrix;
 	mat4 projectionMatrix;
+	mat4 normalMatrix;
 }WorldData;
 
-// Output data ; will be interpolated for each fragment.
-out VertexData outData;
-
-// Values that stay constant for the whole mesh.
-layout(location = 12) uniform mat4 MVP;
+out Data
+{
+	vec3 normal;
+	vec3 eyePos;
+	vec3 lightDir;
+	float attenuation;
+	vec3 color;
+} outData;
 
 out gl_PerVertex
 {
@@ -36,11 +29,22 @@ out gl_PerVertex
 	float gl_ClipDistance[];
 };
 
+uniform vec3 lightPosition = vec3(0.0, -5.0, 10.0);
+
 void main()
 {	
-	mat4 MVP = WorldData.projectionMatrix * WorldData.viewMatrix * WorldData.modelMatrix;
-	//mat4 matrix = MVP;	
-	gl_Position =  MVP * vec4(data.position, 1);
-	outData = data;
+	mat4 MV = WorldData.viewMatrix * WorldData.modelMatrix;
+	
+	vec3 pos = (MV * vec4(position, 1.0)).xyz;
+	vec3 lightPos = (WorldData.viewMatrix * vec4(lightPosition, 1.0)).xyz;
+
+	outData.normal = normalize(mat3(WorldData.normalMatrix) * normal);
+	outData.lightDir = normalize(lightPos - pos);
+	outData.eyePos = normalize(WorldData.viewMatrix * vec4(-pos, 1.0)).xyz;
+
+	float distance = length(lightPos - pos);
+	outData.attenuation = 1.0 / (distance * distance);
+
+	gl_Position =  WorldData.projectionMatrix * MV * vec4(position, 1);
 }
 

@@ -15,9 +15,9 @@ _geometryShader(geometryShader),
 _tessControlShader(tessControlShader),
 _tessEvalShader(tessEvalShader)
 {
-	_data.diffuseColor = glm::vec3(1.0, 0.0, 0.0);
-	_data.specularColor = glm::vec3(1.0);
-	_data.emissiveColor = glm::vec3(0.0);
+	_data.diffuseColor = glm::vec4(1.0, 0.0, 0.0, 0.0);
+	_data.specularColor = glm::vec4(1.0);
+	_data.emissiveColor = glm::vec4(0.0);
 
 	_data.metalic = 200;
 	_data.roughness = 0.0;

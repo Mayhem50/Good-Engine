@@ -183,9 +183,9 @@ int main(int argc, char* argv[])
 	int nbMesh = 0;
 
 	ILoader* loader = new LoaderObj;
-	MeshPtr loadedMesh = loader->load("../Objects/Sphere.obj");
-	loadedMesh->setPosition(glm::vec3(-1.0, -1.0, 0.0));
-	loadedMesh->setScale(glm::vec3(0.5));
+	MeshPtr loadedMesh = loader->load("../Objects/SuzanneHP.obj");
+	loadedMesh->setPosition(glm::vec3(0.0, 0.0, -1.0));
+	loadedMesh->setScale(glm::vec3(1.0, 1.0, 1.0));
 	loadedMesh->setMaterial(material);
 	loadedMesh->init();
 	MeshList.push_back(loadedMesh);	
@@ -214,7 +214,7 @@ int main(int argc, char* argv[])
 	gViewport = ViewportPtr(new Viewport(0, 0, 1024, 768));
 	gCamera = CameraPtr(new Camera(gViewport));
 
-	//FrameBufferObjectPtr fbo(new FrameBufferObject(gViewport->width(), gViewport->height()));
+	FrameBufferObjectPtr fbo(new FrameBufferObject(gViewport->width(), gViewport->height()));
 
 	glEnable(GL_CULL_FACE);
 	glEnable(GL_DEPTH_TEST);
@@ -224,8 +224,7 @@ int main(int argc, char* argv[])
 		glm::mat4 modelMatrix;
 		glm::mat4 viewMatrix;
 		glm::mat4 projectionMatrix;
-		glm::mat4 transposeInverse;
-		glm::vec3 camPosition;
+		glm::mat4 normalMatrix;
 	};
 	
 	GLuint bufferID;
@@ -233,29 +232,34 @@ int main(int argc, char* argv[])
 	glBindBuffer(GL_UNIFORM_BUFFER, bufferID);
 	glBufferData(GL_UNIFORM_BUFFER, sizeof(WorldTransform), NULL, GL_DYNAMIC_DRAW);
 
+	float angle = 1.0;
+
 	do{
-		//fbo->bind();
+		fbo->bind();
 		glClearColor(0.3f, 0.3f, 0.3f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
+		
 		for (int meshIndex = 0; meshIndex <= nbMesh; ++meshIndex)
 		{
+			MeshList[meshIndex]->yaw(angle);
+			transformVS->use();
 			glBindBufferBase(GL_UNIFORM_BUFFER, 0, bufferID);
 			WorldTransform *transform = (WorldTransform*)glMapBufferRange(GL_UNIFORM_BUFFER, 0, sizeof(WorldTransform), GL_MAP_WRITE_BIT | GL_MAP_INVALIDATE_BUFFER_BIT);
 				
 			transform->modelMatrix = MeshList[meshIndex]->localMatrix();
 			transform->viewMatrix = gCamera->viewMatrix();
 			transform->projectionMatrix = gCamera->projectionMatrix();
-			transform->transposeInverse = glm::transpose(glm::inverse(MeshList[meshIndex]->localMatrix()));
-			transform->camPosition = gCamera->from();
+			glm::mat4 modelView = gCamera->viewMatrix() * MeshList[meshIndex]->localMatrix();
+			transform->normalMatrix = glm::transpose(glm::inverse(modelView));
 
 			glUnmapBuffer(GL_UNIFORM_BUFFER);
 			glm::mat4 localToWorldMatrix = MeshList[meshIndex]->localMatrix();
 			MeshList[meshIndex]->draw();
+
 		}
 
-		//fbo->unbind();
-		//renderToTexture(materialRTT, fbo);
+		fbo->unbind();
+		renderToTexture(materialRTT, fbo);
 
 		// Swap buffers
 		glfwSwapBuffers(window);
@@ -343,8 +347,8 @@ void computeMotion(GLFWwindow* window, int key, int action)
 	glm::vec3 up = glm::cross(right, direction);
 
 	gCamera->setFrom(position);
-	gCamera->setTo(position - direction);
-	gCamera->setUp(up);
+	gCamera->setTo(position + direction);
+	gCamera->setUp(glm::vec3(0.0, 1.0, 0.0));
 
 	lastTime = currentTime;
 }

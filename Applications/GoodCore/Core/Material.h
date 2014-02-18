@@ -27,9 +27,9 @@ namespace Good
 
 		struct Data
 		{
-			glm::vec3 diffuseColor;
-			glm::vec3 specularColor;
-			glm::vec3 emissiveColor;
+			glm::vec4 diffuseColor;
+			glm::vec4 specularColor;
+			glm::vec4 emissiveColor;
 
 			float metalic;
 			float roughness;
