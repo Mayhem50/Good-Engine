@@ -15,8 +15,10 @@ namespace Good
 		FrameBufferObject(int width, int height);
 		~FrameBufferObject();
 
-		GLuint fboID() const;
-		GLuint textureID() const;
+		GLuint id() const;
+		GLuint colorBuffer() const;
+		GLuint normalBuffer() const;
+		GLuint depthBuffer() const;
 
 		bool isValid() const;
 
@@ -27,8 +29,9 @@ namespace Good
 		bool _init();
 
 		GLuint _frameBufferID;
-		GLuint _depthBufferID;
-		GLuint _texID;
+		GLuint _colorTex;
+		GLuint _normalTex;
+		GLuint _depthTex;
 
 		GLenum _drawBuffer;
 

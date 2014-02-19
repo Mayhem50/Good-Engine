@@ -29,6 +29,7 @@ using namespace Good;
 
 ViewportPtr gViewport = nullptr;
 CameraPtr gCamera = nullptr;
+int whatRender = 0;
 
 void renderToTexture(MaterialPtr material, FrameBufferObjectPtr fbo);
 
@@ -63,11 +64,23 @@ void renderToTexture(MaterialPtr material, FrameBufferObjectPtr fbo)
 
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-	glActiveTexture(GL_TEXTURE0);
-	glBindTexture(GL_TEXTURE_2D, fbo->textureID());
-	//glUniform1i(texID, 0);
+	switch (whatRender)
+	{
+	case 0:
+		glBindTexture(GL_TEXTURE_2D, fbo->colorBuffer());
+		break;
+	case 1:
+		glBindTexture(GL_TEXTURE_2D, fbo->normalBuffer());
+		break;
+	case 2:
+		glBindTexture(GL_TEXTURE_2D, fbo->depthBuffer());
+		break;
+	}
+
 	GLint texLoc = glGetUniformLocation(fragmentShader->id(), "tex0");
+	GLint linearise = glGetUniformLocation(fragmentShader->id(), "linearize");
 	glProgramUniform1i(fragmentShader->id(), texLoc, 0);
+	glProgramUniform1i(fragmentShader->id(), linearise, whatRender);
 
 	glEnableVertexAttribArray(0);
 	glBindBuffer(GL_ARRAY_BUFFER, quad_vertexbuffer);
@@ -123,6 +136,7 @@ int main(int argc, char* argv[])
 	// Ensure we can capture the escape key being pressed below
 	glfwSetInputMode(window, GLFW_STICKY_KEYS, GL_TRUE);
 	glfwSetKeyCallback(window, keyCallback);
+	glfwSetCursorPos(window, 1024 / 2, 768 / 2);
 
 	// Dark blue background
 	glClearColor(0.0f, 0.0f, 0.4f, 0.0f);
@@ -185,7 +199,6 @@ int main(int argc, char* argv[])
 	ILoader* loader = new LoaderObj;
 	MeshPtr loadedMesh = loader->load("../Objects/SuzanneHP.obj");
 	loadedMesh->setPosition(glm::vec3(0.0, 0.0, -1.0));
-	loadedMesh->setScale(glm::vec3(1.0, 1.0, 1.0));
 	loadedMesh->setMaterial(material);
 	loadedMesh->init();
 	MeshList.push_back(loadedMesh);	
@@ -204,7 +217,7 @@ int main(int argc, char* argv[])
 
 		float posFactor = 0.1f * (float)idMesh;
 		mesh->setPosition(glm::vec3(posFactor));
-		mesh->setScale(glm::vec3(0.5));
+		mesh->setScale(glm::vec3(0.5, 1.0, 0.75));
 		mesh->setMaterial(material);
 		mesh->init();		
 
@@ -233,6 +246,7 @@ int main(int argc, char* argv[])
 	glBufferData(GL_UNIFORM_BUFFER, sizeof(WorldTransform), NULL, GL_DYNAMIC_DRAW);
 
 	float angle = 1.0;
+	float xFactor = 0.0;
 
 	do{
 		fbo->bind();
@@ -297,7 +311,7 @@ void computeMotion(GLFWwindow* window, int key, int action)
 	static float mouseSpeed = 0.005f;
 
 	double currentTime = glfwGetTime();
-	float deltaTime = float(currentTime - lastTime);
+	float deltaTime = 0.02;//float(currentTime - lastTime);
 
 	double xpos, ypos;
 	glfwGetCursorPos(window, &xpos, &ypos);
@@ -318,31 +332,31 @@ void computeMotion(GLFWwindow* window, int key, int action)
 	glm::vec3 position = gCamera->from();
 
 
-	if (key == GLFW_KEY_UP && action == GLFW_PRESS)
-	{
+	if (key == GLFW_KEY_UP)
 		position += direction * deltaTime * speed;
-	}
 
-	else if (key == GLFW_KEY_DOWN && action == GLFW_PRESS)
-	{
+	else if (key == GLFW_KEY_DOWN)
 		position -= direction * deltaTime * speed;
-	}
 
-	else if (key == GLFW_KEY_RIGHT && action == GLFW_PRESS)
-	{
+	else if (key == GLFW_KEY_RIGHT)
 		position += right * deltaTime * speed;
-	}
 
-	else if (key == GLFW_KEY_LEFT && action == GLFW_PRESS)
-	{
+	else if (key == GLFW_KEY_LEFT)
 		position -= right * deltaTime * speed;
-	}
 
-	else if (key == GLFW_KEY_P && action == GLFW_PRESS)
+	else if (key == GLFW_KEY_P)
 		gCamera->setType(Camera::PERSPECTIVE);
 
-	else if (key == GLFW_KEY_O && action == GLFW_PRESS)
+	else if (key == GLFW_KEY_O)
 		gCamera->setType(Camera::ORTHOGRAPHIC);
+
+	else if (key == GLFW_KEY_R && action == GLFW_PRESS)
+	{
+		if (whatRender == 2)
+			whatRender = 0;
+		else
+			++whatRender;
+	}
 
 	glm::vec3 up = glm::cross(right, direction);
 

@@ -32,6 +32,7 @@ namespace Good
 			glm::vec4 emissiveColor;
 
 			float metalic;
+			float shinyness;
 			float roughness;
 			float opacity;
 			float refraction;

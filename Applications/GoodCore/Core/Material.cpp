@@ -19,7 +19,8 @@ _tessEvalShader(tessEvalShader)
 	_data.specularColor = glm::vec4(1.0);
 	_data.emissiveColor = glm::vec4(0.0);
 
-	_data.metalic = 200;
+	_data.metalic = 0.0;
+	_data.shinyness = 0.01;
 	_data.roughness = 0.0;
 	_data.opacity = 1.0;
 	_data.refraction = 1.0;
