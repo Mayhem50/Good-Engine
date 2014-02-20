@@ -22,6 +22,8 @@ namespace Good
 		GLuint id() const;
 		void bind();
 
+		bool isValid() const;
+
 		ShaderProgramsList currentPrograms() const;
 
 	private:

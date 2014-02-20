@@ -1,9 +1,10 @@
-﻿Build started 2/19/2014 11:53:08 PM.
+﻿Build started 2/21/2014 12:21:07 AM.
      1>Project "X:\DevGit\Good-Engine\Applications\Validation\Validation.vcxproj" on node 2 (Build target(s)).
      1>Link:
          C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\x86_amd64\link.exe /ERRORREPORT:PROMPT /OUT:"X:\DevGit\Good-Engine\build\x64\Debug\Validation.exe" /INCREMENTAL /NOLOGO /LIBPATH:"X:\DevGit\Good-Engine\build\x64\Debug\\" /LIBPATH:"X:\ThirdParties\glew-1.10.0\lib\x64\Debug" /LIBPATH:"X:\ThirdParties\glfw-3.0.3\lib\x64\Debug" opengl32.lib Core.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib glew32.lib glfw3.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"X:\DevGit\Good-Engine\build\x64\Debug\Validation.pdb" /SUBSYSTEM:CONSOLE /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"X:\DevGit\Good-Engine\build\x64\Debug\Validation.lib" /MACHINE:X64 x64\Debug\Validation.res
          x64\Debug\Validation.obj
          "X:\DevGit\Good-Engine\build\x64\Debug\Core.lib"
+         LINK : X:\DevGit\Good-Engine\build\x64\Debug\Validation.exe not found or not built by the last incremental link; performing full link
          Validation.vcxproj -> X:\DevGit\Good-Engine\build\x64\Debug\Validation.exe
        BscMake:
          C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\bscmake.exe /nologo /o"X:\DevGit\Good-Engine\build\x64\Debug\Validation.bsc" /n x64\Debug\Validation.sbr
@@ -11,4 +12,4 @@
 
 Build succeeded.
 
-Time Elapsed 00:00:01.19
+Time Elapsed 00:00:01.23

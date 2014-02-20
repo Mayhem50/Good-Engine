@@ -36,10 +36,13 @@ namespace Good
 		GLbitfield bitField() const;
 		GLuint id() const;
 
+		bool isValid() const;
+
 		ShaderVariablesList inputs() const;
 		ShaderVariablesList outputs() const;
 
 		void use() const;
+		void unsuse() const;
 
 		static const ShaderProgramPtr EMPY_PROGRAM;
 

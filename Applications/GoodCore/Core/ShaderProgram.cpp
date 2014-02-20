@@ -24,6 +24,8 @@ _type(type)
 	_logger->write("Create", this);
 #endif
 
+	_pipeline->addShaderProgram(this);
+
 	if (!sourceFile || !pipeline)
 		return;
 
@@ -92,9 +94,7 @@ _type(type)
 	_log += infos;
 	if (!ShaderTools::linkStatus(_id))
 		return;
-
-	_pipeline->addShaderProgram(this);
-
+	
 	glDetachShader(_id, shaderId);
 	glDeleteShader(shaderId);
 	_isValid = true;
@@ -118,6 +118,11 @@ GLbitfield ShaderProgram::bitField() const
 GLuint ShaderProgram::id() const
 {
 	return _id;
+}
+
+bool ShaderProgram::isValid() const
+{
+	return _isValid;
 }
 
 ShaderVariablesList ShaderProgram::inputs() const
@@ -163,5 +168,11 @@ ShaderVariablesList ShaderProgram::outputs() const
 void ShaderProgram::use() const
 {
 	glUseProgramStages(_pipeline->id(), _bitField, _id);
+	_pipeline->bind();
+}
+
+void ShaderProgram::unsuse() const
+{
+	glUseProgramStages(_pipeline->id(), _bitField, 0);
 	_pipeline->bind();
 }

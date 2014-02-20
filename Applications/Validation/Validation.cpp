@@ -30,6 +30,7 @@ using namespace Good;
 ViewportPtr gViewport = nullptr;
 CameraPtr gCamera = nullptr;
 int whatRender = 0;
+bool showNormal = false;
 
 void renderToTexture(MaterialPtr material, FrameBufferObjectPtr fbo);
 
@@ -183,13 +184,18 @@ int main(int argc, char* argv[])
 	GLSLPipelinePtr pipeline(new GLSLPipeline);
 
 	ShaderProgramPtr passthroughVS(new ShaderProgram(pipeline, "../Shaders/Passthrough.vert", GL_VERTEX_SHADER, "passthroughVS"));
-	ShaderVariablesList inputs = passthroughVS->inputs();
-	ShaderVariablesList outputs = passthroughVS->outputs();
-	ShaderProgramPtr colorFS(new ShaderProgram(pipeline, "../Shaders/ColorFragmentShader.frag", GL_FRAGMENT_SHADER, "colorFragment"));
 	ShaderProgramPtr transformVS(new ShaderProgram(pipeline, "../Shaders/SimpleTransform.vert", GL_VERTEX_SHADER, "transforVS"));
+
+	ShaderProgramPtr colorFS(new ShaderProgram(pipeline, "../Shaders/ColorFragmentShader.frag", GL_FRAGMENT_SHADER, "colorFragment"));
 	ShaderProgramPtr simpleFS(new ShaderProgram(pipeline, "../Shaders/SimpleFragmentShader.frag", GL_FRAGMENT_SHADER, "simpleFS"));
 	ShaderProgramPtr textureFS(new ShaderProgram(pipeline, "../Shaders/SimpleTexture.frag", GL_FRAGMENT_SHADER, "textureFS"));
+
+	ShaderProgramPtr passthroughGS(new ShaderProgram(pipeline, "../Shaders/Passthrough.geom", GL_GEOMETRY_SHADER, "passthroughGS"));
+	ShaderProgramPtr normalGS(new ShaderProgram(pipeline, "../Shaders/NormalViewer.geom", GL_GEOMETRY_SHADER, "normalGS"));
 	
+	if (!pipeline->isValid())
+		return -5;
+
 	MaterialPtr material(new Material(transformVS, colorFS));
 	MaterialPtr materialRTT(new Material(passthroughVS, textureFS));
 
@@ -250,6 +256,11 @@ int main(int argc, char* argv[])
 
 	do{
 		fbo->bind();
+		if (showNormal)
+			normalGS->use();
+		else
+			passthroughGS->use();
+
 		glClearColor(0.3f, 0.3f, 0.3f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 		
@@ -273,6 +284,8 @@ int main(int argc, char* argv[])
 		}
 
 		fbo->unbind();
+		passthroughGS->unsuse();
+		normalGS->unsuse();
 		renderToTexture(materialRTT, fbo);
 
 		// Swap buffers
@@ -356,6 +369,11 @@ void computeMotion(GLFWwindow* window, int key, int action)
 			whatRender = 0;
 		else
 			++whatRender;
+	}
+
+	else if (key == GLFW_KEY_N && action == GLFW_PRESS)
+	{
+		showNormal = !showNormal;
 	}
 
 	glm::vec3 up = glm::cross(right, direction);

@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2013
-VisualStudioVersion = 12.0.21005.1
+VisualStudioVersion = 12.0.30110.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "GoodCore", "GoodCore", "{77AA3A71-F6B9-48A7-BFAC-B44130E04926}"
 EndProject
@@ -14,17 +14,29 @@ EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Validation", "Applications\Validation\Validation.vcxproj", "{2F1F5F57-47F7-4A24-9C1E-C85896F67803}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Shaders", "Shaders", "{4154FF64-9601-47E9-A633-05AB499B2708}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Vertex", "Vertex", "{DE81960A-EC1F-4135-BC58-1457CE90ABAC}"
 	ProjectSection(SolutionItems) = preProject
-		Applications\Shaders\ColorFragmentShader.frag = Applications\Shaders\ColorFragmentShader.frag
 		Applications\Shaders\Passthrough.vert = Applications\Shaders\Passthrough.vert
-		Applications\Shaders\SimpleFragmentShader.frag = Applications\Shaders\SimpleFragmentShader.frag
-		Applications\Shaders\SimpleTexture.frag = Applications\Shaders\SimpleTexture.frag
 		Applications\Shaders\SimpleTransform.vert = Applications\Shaders\SimpleTransform.vert
 		Applications\Shaders\SimpleVertexShader.vert = Applications\Shaders\SimpleVertexShader.vert
-		Applications\Shaders\SingleColor.frag = Applications\Shaders\SingleColor.frag
-		Applications\Shaders\StandardShadingRTT.frag = Applications\Shaders\StandardShadingRTT.frag
 		Applications\Shaders\StandardShadingRTT.vert = Applications\Shaders\StandardShadingRTT.vert
 		Applications\Shaders\TransformVertexShader.vert = Applications\Shaders\TransformVertexShader.vert
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Fragment", "Fragment", "{C0773C1F-78C7-41DF-948B-8927EBB0029B}"
+	ProjectSection(SolutionItems) = preProject
+		Applications\Shaders\ColorFragmentShader.frag = Applications\Shaders\ColorFragmentShader.frag
+		Applications\Shaders\SimpleFragmentShader.frag = Applications\Shaders\SimpleFragmentShader.frag
+		Applications\Shaders\SimpleTexture.frag = Applications\Shaders\SimpleTexture.frag
+		Applications\Shaders\SingleColor.frag = Applications\Shaders\SingleColor.frag
+		Applications\Shaders\StandardShadingRTT.frag = Applications\Shaders\StandardShadingRTT.frag
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Geometry", "Geometry", "{14237289-3CF1-4C3B-BDA3-503A6DF1E48C}"
+	ProjectSection(SolutionItems) = preProject
+		Applications\Shaders\NormalViewer.geom = Applications\Shaders\NormalViewer.geom
+		Passthrough.geom = Passthrough.geom
 	EndProjectSection
 EndProject
 Global
@@ -79,6 +91,9 @@ Global
 	GlobalSection(NestedProjects) = preSolution
 		{F08B7194-F6D4-4F0A-B4EF-E8335A02680D} = {77AA3A71-F6B9-48A7-BFAC-B44130E04926}
 		{5EDC5EAE-0A57-4605-B1EA-1DEBC8F1CAE3} = {7F97BBEE-5DEF-4270-B918-AB3820E7DE73}
+		{DE81960A-EC1F-4135-BC58-1457CE90ABAC} = {4154FF64-9601-47E9-A633-05AB499B2708}
+		{C0773C1F-78C7-41DF-948B-8927EBB0029B} = {4154FF64-9601-47E9-A633-05AB499B2708}
+		{14237289-3CF1-4C3B-BDA3-503A6DF1E48C} = {4154FF64-9601-47E9-A633-05AB499B2708}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		VisualSVNWorkingCopyRoot = .

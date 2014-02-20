@@ -36,6 +36,17 @@ GLuint GLSLPipeline::id() const
 	return _id;
 }
 
+bool GLSLPipeline::isValid() const
+{
+	bool ret = true;
+
+	ShaderProgramsList::const_iterator it = _programsList.begin();
+	for (; it != _programsList.end(); ++it)
+		ret &= (*it)->isValid();
+
+	return ret;
+}
+
 void GLSLPipeline::bind()
 {
 	glUseProgram(0);
