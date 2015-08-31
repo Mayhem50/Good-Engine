@@ -203,7 +203,7 @@ int main(int argc, char* argv[])
 	int nbMesh = 0;
 
 	ILoader* loader = new LoaderObj;
-	MeshPtr loadedMesh = loader->load("../Objects/SuzanneHP.obj");
+	MeshPtr loadedMesh = loader->load("X:\\DevGit\\Good-Engine\\Assets\\Objects\\sphere.obj");
 	loadedMesh->setPosition(glm::vec3(0.0, 0.0, -1.0));
 	loadedMesh->setMaterial(material);
 	loadedMesh->init();
@@ -251,7 +251,7 @@ int main(int argc, char* argv[])
 	glBindBuffer(GL_UNIFORM_BUFFER, bufferID);
 	glBufferData(GL_UNIFORM_BUFFER, sizeof(WorldTransform), NULL, GL_DYNAMIC_DRAW);
 
-	float angle = 1.0;
+	float angle = .01;
 	float xFactor = 0.0;
 
 	do{

@@ -1,14 +1,5 @@
-﻿Build started 12/22/2013 4:23:42 PM.
-     1>Project "X:\DevGit\Good-Engine\Applications\Tools\Logger\Logger.vcxproj" on node 3 (Build target(s)).
-     1>ClCompile:
-         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\x86_amd64\CL.exe /c /Zi /nologo /W3 /WX- /Od /D WIN32 /D _DEBUG /D _LIB /D _UNICODE /D UNICODE /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"x64\Debug\\" /Fd"x64\Debug\vc120.pdb" /FR"x64\Debug\\" /Gd /TP /errorReport:prompt ILogger.cpp LogFile.cpp
-         LogFile.cpp
-     1>x:\devgit\good-engine\applications\tools\logger\ilogger.h(4): fatal error C1083: Cannot open include file: '../../GoodCore/Core/GoodFoundationLib.h': No such file or directory
-         ILogger.cpp
-     1>x:\devgit\good-engine\applications\tools\logger\ILogger.h(4): fatal error C1083: Cannot open include file: '../../GoodCore/Core/GoodFoundationLib.h': No such file or directory
-         Generating Code...
-     1>Done Building Project "X:\DevGit\Good-Engine\Applications\Tools\Logger\Logger.vcxproj" (Build target(s)) -- FAILED.
+﻿La génération a démarré 8/31/2015 3:50:17 PM.
 
-Build FAILED.
+La génération a réussi.
 
-Time Elapsed 00:00:00.99
+Temps écoulé 00:00:00.01
