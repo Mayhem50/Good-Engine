@@ -1,11 +1,12 @@
 #pragma once
 
 #include "GoodObject.h"
+#include "GoodFoundation.h"
 
 #include "ShaderProgram.h"
 
 #ifdef _DEBUG
-#include "ILogger.h"
+
 #endif
 
 #include <memory>
@@ -31,7 +32,7 @@ namespace Good
 		ShaderProgramsList _programsList;
 
 #ifdef _DEBUG
-		ILoggerPtr _logger;
+		
 #endif
 	};
 }

@@ -1,7 +1,5 @@
 #include "Camera.h"
 
-#include "LogConsole.h"
-
 #include <glm\gtc\matrix_transform.hpp>
 
 using namespace Good;
@@ -16,8 +14,7 @@ _zMin(0.01f), _zMax(100.0f),
 _viewport(viewport)
 {
 #ifdef _DEBUG
-	_logger = ILoggerPtr(new LogConsole);
-	_logger->write("Create", this);
+
 #endif
 	_updateViewMatrix();
 	_updateProjectionMatrix();
@@ -27,24 +24,14 @@ _viewport(viewport)
 Camera::~Camera()
 {
 #ifdef _DEBUG
-	_logger->write("Delete", this);
+
 #endif
 }
 
 void Camera::setType(CAMERA_TYPE type)
 {
 #ifdef _DEBUG
-	std::string typeStr;
-	switch (type)
-	{
-	case Good::Camera::PERSPECTIVE:
-		typeStr = "PERSPECTIVE";
-		break;
-	case Good::Camera::ORTHOGRAPHIC:
-		typeStr = "ORTHOGRAPHIC";
-		break;
-	}
-	_logger->write("Change type: " + typeStr, this);
+	
 #endif
 	_type = type;
 	_updateProjectionMatrix();
@@ -58,14 +45,7 @@ Camera::CAMERA_TYPE Camera::type() const
 void Camera::setFrom(const glm::vec3& from)
 {
 #ifdef _DEBUG
-	std::string fromStr;
-	fromStr += std::to_string(from.x);
-	fromStr += " ";
-	fromStr += std::to_string(from.y);
-	fromStr += " ";
-	fromStr += std::to_string(from.z);
-	fromStr += " ";
-	_logger->write("Change from " + fromStr, this);
+	
 #endif
 	_from = from;
 	_updateViewMatrix();
@@ -74,14 +54,7 @@ void Camera::setFrom(const glm::vec3& from)
 void Camera::setTo(const glm::vec3& to)
 {
 #ifdef _DEBUG
-	std::string toStr;
-	toStr += std::to_string(to.x);
-	toStr += " ";
-	toStr += std::to_string(to.y);
-	toStr += " ";
-	toStr += std::to_string(to.z);
-	toStr += " ";
-	_logger->write("Change to " + toStr, this);
+	
 #endif
 	_to = to;
 	_updateViewMatrix();
@@ -90,14 +63,7 @@ void Camera::setTo(const glm::vec3& to)
 void Camera::setUp(const glm::vec3& up)
 {
 #ifdef _DEBUG
-	std::string upStr;
-	upStr += std::to_string(up.x);
-	upStr += " ";
-	upStr += std::to_string(up.y);
-	upStr += " ";
-	upStr += std::to_string(up.z);
-	upStr += " ";
-	_logger->write("Change to " + upStr, this);
+	
 #endif
 	_up = up;
 	_updateViewMatrix();
@@ -106,9 +72,7 @@ void Camera::setUp(const glm::vec3& up)
 void Camera::setZmin(float zMin)
 {
 #ifdef _DEBUG
-	std::string zMinStr;
-	zMinStr += std::to_string(zMin);
-	_logger->write("Change to " + zMinStr, this);
+	
 #endif
 	_zMin = zMin;
 	_updateProjectionMatrix();
@@ -117,9 +81,7 @@ void Camera::setZmin(float zMin)
 void Camera::setZMax(float zMax)
 {
 #ifdef _DEBUG
-	std::string zMaxStr;
-	zMaxStr += std::to_string(zMax);
-	_logger->write("Change to " + zMaxStr, this);
+	
 #endif
 	_zMax = zMax;
 	_updateProjectionMatrix();
@@ -128,9 +90,7 @@ void Camera::setZMax(float zMax)
 void Camera::setFovY(float fovY)
 {
 #ifdef _DEBUG
-	std::string fovYStr;
-	fovYStr += std::to_string(fovY);
-	_logger->write("Change to " + fovYStr, this);
+	
 #endif
 	_fovy = fovY;
 	_updateProjectionMatrix();
@@ -179,7 +139,7 @@ glm::mat4 Camera::projectionMatrix() const
 void Camera::_updateProjectionMatrix()
 {
 #ifdef _DEBUG
-	_logger->write("Update Projection Matrix", this);
+	
 #endif
 	if (_type == ORTHOGRAPHIC)
 		_projectionMatrix = glm::ortho((float)_viewport->X(), (float)_viewport->X() + (float)_viewport->width(), (float)_viewport->Y(), (float)_viewport->Y() + (float)_viewport->height(), (float)_zMin, (float)_zMax);
@@ -190,7 +150,7 @@ void Camera::_updateProjectionMatrix()
 void Camera::_updateViewMatrix()
 {
 #ifdef _DEBUG
-	_logger->write("Update View Matrix", this);
+	
 #endif
 	_viewMatrix = glm::lookAt(_from, _to, _up);
 }

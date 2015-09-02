@@ -51,16 +51,7 @@
     <ClInclude Include="GoodFoundation.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="LogConsole.h">
-      <Filter>Header Files\Helper</Filter>
-    </ClInclude>
-    <ClInclude Include="LogFile.h">
-      <Filter>Header Files\Helper</Filter>
-    </ClInclude>
     <ClInclude Include="LogManager.h">
-      <Filter>Header Files\Helper</Filter>
-    </ClInclude>
-    <ClInclude Include="ILogger.h">
       <Filter>Header Files\Helper</Filter>
     </ClInclude>
     <ClInclude Include="Singleton.h">
@@ -136,12 +127,6 @@
     </ClCompile>
     <ClCompile Include="ShaderProgram.cpp">
       <Filter>Source Files\Shaders</Filter>
-    </ClCompile>
-    <ClCompile Include="LogFile.cpp">
-      <Filter>Source Files\Helper</Filter>
-    </ClCompile>
-    <ClCompile Include="LogConsole.cpp">
-      <Filter>Source Files\Helper</Filter>
     </ClCompile>
     <ClCompile Include="LoaderObj.cpp">
       <Filter>Source Files\Helper</Filter>

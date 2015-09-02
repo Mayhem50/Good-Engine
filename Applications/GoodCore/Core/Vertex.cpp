@@ -11,6 +11,18 @@ uv(0.0)
 	_randomColor();
 }
 
+Vertex::Vertex(const Vertex& vertex):
+position(vertex.position), normal(vertex.normal),
+uv(vertex.uv), color(vertex.color)
+{
+}
+
+Vertex::Vertex(const Vertex&& vertex):
+position(vertex.position), normal(vertex.normal),
+uv(vertex.uv), color(vertex.color)
+{
+}
+
 Vertex::~Vertex()
 {}
 
@@ -22,6 +34,26 @@ bool Vertex::operator==(const Vertex& vertex) const
 bool Vertex::operator!=(const Vertex& vertex) const
 {
 	return !((*this) == vertex);
+}
+
+Vertex& Vertex::operator=(const Vertex& vertex)
+{
+	this->position = vertex.position;
+	this->normal = vertex.normal;
+	this->uv = vertex.uv;
+	this->color = vertex.color;
+
+	return *this;
+}
+
+Vertex& Vertex::operator=(const Vertex&& vertex)
+{
+	this->position = vertex.position;
+	this->normal = vertex.normal;
+	this->uv = vertex.uv;
+	this->color = vertex.color;
+
+	return *this;
 }
 
 void Vertex::_randomColor()

@@ -13,6 +13,13 @@ _isIndiced(false)
 	glGenVertexArrays(1, &_vaoID);
 }
 
+Mesh::Mesh(const VerticesList& vertices, const std::vector<unsigned int>& indices, const std::string& name, const ISceneNodePtr& parent) :
+_vertices(vertices), _indices(indices),
+ISceneNode(name, parent),
+_isIndiced(false)
+{
+	glGenVertexArrays(1, &_vaoID);
+}
 
 Mesh::~Mesh()
 {
@@ -31,8 +38,8 @@ bool Mesh::init()
 	if (!_isIndiced)
 		_createIndicesBufferData();
 
-	_orienteTriangles();
-	_computeNormals();
+	//_orienteTriangles();
+	//_computeNormals();
 
 	glGenBuffers(1, &_vertexBufferID);
 	glBindBuffer(GL_ARRAY_BUFFER, _vertexBufferID);
@@ -117,6 +124,28 @@ unsigned int Mesh::addVertex(const glm::vec3& position)
 	return addVertex(vertex);
 }
 
+void Mesh::addVertices(const VerticesList& vertices)
+{
+	for (auto vertex : vertices)
+		_vertices.push_back(vertex);
+}
+
+void Mesh::addIndices(const std::vector<unsigned int>& indexes)
+{
+	for (auto index : indexes)
+		_indices.push_back(index);
+}
+
+void Mesh::setVertices(const VerticesList& vertices)
+{
+	_vertices = vertices;
+}
+
+void Mesh::setIndices(const std::vector<unsigned int> indices)
+{
+	_indices = indices;
+}
+
 void Mesh::createTriangles(unsigned int tri1, unsigned int tri2, unsigned int tri3)
 {
 	_indices.push_back(tri1);
@@ -128,7 +157,7 @@ void Mesh::createTriangles(unsigned int tri1, unsigned int tri2, unsigned int tr
 
 void Mesh::createTriangles(const Vertex& v1, const Vertex& v2, const Vertex& v3)
 {	
-	_vertices.push_back(v1);
+ 	_vertices.push_back(v1);
 	_vertices.push_back(v2);
 	_vertices.push_back(v3);
 	createTriangles(v1.indice, v2.indice, v3.indice);
@@ -141,15 +170,9 @@ void Mesh::setMaterial(MaterialPtr material)
 #pragma endregion
 
 #pragma region Private Methods
-VerticesList::const_iterator Mesh::_findVertex(const Vertex& vertex)
+bool Mesh::_vertexExist(const Vertex& vertex) const
 {
-	VerticesList::const_iterator it = _vertices.begin();
-
-	for (; it != _vertices.end(); ++it)
-		if ((*it) == vertex)
-			break;
-
-	return it;
+	return std::find(_vertices.begin(), _vertices.end(), vertex) != _vertices.end() ? true : false;
 }
 
 void Mesh::_createIndicesBufferData()

@@ -1,7 +1,7 @@
 #include "GLSLPipeline.h"
 
 #ifdef _DEBUG
-#include "LogConsole.h"
+
 #endif
 
 #include <algorithm>

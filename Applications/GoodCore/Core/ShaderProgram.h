@@ -1,8 +1,7 @@
 #pragma once
 
 #include "GoodObject.h"
-
-#include "ILogger.h"
+#include "GoodFoundation.h"
 
 #include <GL\glew.h>
 
@@ -61,7 +60,7 @@ namespace Good
 
 
 #ifdef _DEBUG
-		ILoggerPtr _logger;
+		
 #endif
 	};
 }

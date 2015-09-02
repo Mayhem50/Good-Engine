@@ -202,8 +202,7 @@ int main(int argc, char* argv[])
 	std::vector<MeshPtr> MeshList;
 	int nbMesh = 0;
 
-	ILoader* loader = new LoaderObj;
-	MeshPtr loadedMesh = loader->load("X:\\DevGit\\Good-Engine\\Assets\\Objects\\sphere.obj");
+	MeshPtr loadedMesh = GeometryLoader::load("X:\\DevGit\\Good-Engine\\Assets\\Objects\\suzanne.obj");
 	loadedMesh->setPosition(glm::vec3(0.0, 0.0, -1.0));
 	loadedMesh->setMaterial(material);
 	loadedMesh->init();
@@ -251,7 +250,7 @@ int main(int argc, char* argv[])
 	glBindBuffer(GL_UNIFORM_BUFFER, bufferID);
 	glBufferData(GL_UNIFORM_BUFFER, sizeof(WorldTransform), NULL, GL_DYNAMIC_DRAW);
 
-	float angle = .01;
+	float angle = .001;
 	float xFactor = 0.0;
 
 	do{

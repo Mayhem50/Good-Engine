@@ -5,7 +5,7 @@
 #include "Viewport.h"
 
 #ifdef _DEBUG
-#include "ILogger.h"
+
 #endif
 
 #include <memory>
@@ -66,7 +66,7 @@ namespace Good
 		ViewportPtr _viewport;
 
 #ifdef _DEBUG
-		ILoggerPtr _logger;
+		//
 #endif
 	};
 

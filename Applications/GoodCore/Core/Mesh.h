@@ -17,6 +17,7 @@ namespace Good
 	{
 	public:
 		Mesh(const std::string& name, const ISceneNodePtr& parent);
+		Mesh(const VerticesList& vertices, const std::vector<unsigned int>& indices, const std::string& name, const ISceneNodePtr& parent);
 		~Mesh();
 
 		virtual bool init();
@@ -27,6 +28,12 @@ namespace Good
 		VerticesList vertices() const;
 		unsigned int addVertex(Vertex& vertex);
 		unsigned int addVertex(const glm::vec3& postion);
+
+		void addVertices(const VerticesList& vertices);
+		void addIndices(const std::vector<unsigned int>& indexes);
+
+		void setVertices(const VerticesList& vertices);
+		void setIndices(const std::vector<unsigned int> indices);
 
 		void createTriangles(unsigned int tri1, unsigned int tri2, unsigned int tri3);
 		void createTriangles(const Vertex& v1, const Vertex& v2, const Vertex& v3);
@@ -39,7 +46,7 @@ namespace Good
 		void _orienteTriangles();
 		void _computeNormals();
 
-		VerticesList::const_iterator _findVertex(const Vertex& vertex);
+		bool _vertexExist(const Vertex& vertex) const;
 
 		std::vector<unsigned int> _indices;
 		VerticesList _vertices;

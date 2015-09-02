@@ -16,6 +16,9 @@ namespace Good{
 		Vertex(void);
 		~Vertex(void);
 
+		Vertex(const Vertex& vertex);
+		Vertex(const Vertex&& vertex);
+
 		glm::vec3 position;
 		glm::vec3 color;
 		glm::vec3 normal;
@@ -27,6 +30,9 @@ namespace Good{
 
 		bool operator==(const Vertex& vertex) const;
 		bool operator!=(const Vertex& vertex) const;
+
+		Vertex& operator=(const Vertex& vertex);
+		Vertex& operator=(const Vertex&& vertex);
 
 		/*
 		glm::vec3 secondaryColor;

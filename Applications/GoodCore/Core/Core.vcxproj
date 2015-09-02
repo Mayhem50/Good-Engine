@@ -63,6 +63,15 @@
     <Import Project="..\..\..\PropertiesSheets\GLFW.props" />
     <Import Project="..\..\..\PropertiesSheets\GLEW.props" />
     <Import Project="..\..\..\PropertiesSheets\Assimp.props" />
+    <Import Project="..\..\..\PropertiesSheets\Boost.props" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="PropertySheets">
+    <Import Project="..\..\..\PropertiesSheets\Common.props" />
+    <Import Project="..\..\..\PropertiesSheets\GLM.props" />
+    <Import Project="..\..\..\PropertiesSheets\GLFW.props" />
+    <Import Project="..\..\..\PropertiesSheets\GLEW.props" />
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="..\..\..\PropertiesSheets\Assimp.props" />
   </ImportGroup>
   <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
@@ -110,6 +119,7 @@
       <BrowseInformation>true</BrowseInformation>
       <StructMemberAlignment>Default</StructMemberAlignment>
       <CompileAs>Default</CompileAs>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -141,7 +151,7 @@
       <WarningLevel>Level3</WarningLevel>
       <PrecompiledHeader>
       </PrecompiledHeader>
-      <Optimization>MaxSpeed</Optimization>
+      <Optimization>Full</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <PreprocessorDefinitions>WIN32;NDEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
@@ -166,12 +176,9 @@
     <ClInclude Include="IRenderable.h" />
     <ClInclude Include="ILight.h" />
     <ClInclude Include="ILoader.h" />
-    <ClInclude Include="ILogger.h" />
     <ClInclude Include="ISceneNode.h" />
     <ClInclude Include="LoaderObj.h" />
     <ClInclude Include="LoadImage.h" />
-    <ClInclude Include="LogConsole.h" />
-    <ClInclude Include="LogFile.h" />
     <ClInclude Include="LogManager.h" />
     <ClInclude Include="Material.h" />
     <ClInclude Include="Mesh.h" />
@@ -194,8 +201,6 @@
     <ClCompile Include="ISceneNode.cpp" />
     <ClCompile Include="LoaderObj.cpp" />
     <ClCompile Include="LoadImage.cpp" />
-    <ClCompile Include="LogConsole.cpp" />
-    <ClCompile Include="LogFile.cpp" />
     <ClCompile Include="Material.cpp" />
     <ClCompile Include="Mesh.cpp" />
     <ClCompile Include="SceneManager.cpp" />

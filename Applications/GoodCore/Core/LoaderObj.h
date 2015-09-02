@@ -4,9 +4,8 @@
 
 namespace Good
 {
-	class GOOD_DLL LoaderObj : public ILoader
+	namespace GeometryLoader
 	{
-	public:
-		virtual MeshPtr load(const char* file);
-	};
+		GOOD_DLL MeshPtr load(const char* file);
+	}
 }

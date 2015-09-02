@@ -4,7 +4,7 @@
 #include "GoodObject.h"
 
 #ifdef _DEBUG
-#include "Ilogger.h"
+
 #endif
 
 #include <vector>
@@ -55,7 +55,7 @@ namespace Good
 		std::string _log;
 
 #ifdef _DEBUG
-		ILoggerPtr _logger;
+		
 #endif
 	};
 

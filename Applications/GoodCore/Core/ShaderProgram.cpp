@@ -4,7 +4,7 @@
 #include "GLSLPipeline.h"
 
 #ifdef _DEBUG
-#include "LogConsole.h"
+
 #endif
 
 #include <fstream>
@@ -20,8 +20,7 @@ _name(name),
 _type(type)
 {
 #ifdef _DEBUG
-	_logger = ILoggerPtr(new LogConsole);
-	_logger->write("Create", this);
+	
 #endif
 
 	_pipeline->addShaderProgram(this);
@@ -73,7 +72,7 @@ _type(type)
 	std::string infos = ShaderTools::compilerInfos(shaderId);
 
 #ifdef _DEBUG
-	_logger->write(infos, this);
+
 #endif
 
 	_log += infos;
@@ -88,7 +87,7 @@ _type(type)
 	infos = ShaderTools::linkerInfos(_id);
 
 #ifdef _DEBUG
-	_logger->write(infos, this);
+	
 #endif
 
 	_log += infos;
