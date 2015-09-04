@@ -1,16 +1,10 @@
 #version 430 core
 
-layout (location = 0) in vec3 position;
-layout (location = 1) in vec3 color;
-layout (location = 2) in vec3 normal;
-layout (location = 3) in vec3 tangent;
-layout (location = 4) in vec2 uv;
+// Input vertex data, different for all executions of this shader.
+layout(location = 0) in vec3 vertexPosition_modelspace;
 
-layout (location = 0) out vec3 outNormal;
-layout (location = 1) out vec3 outTangent;
-layout (location = 2) out vec3 outBitangent;
-layout (location = 3) out vec3 outColor;
-layout (location = 4) out vec2 outUV;
+// Output data ; will be interpolated for each fragment.
+out vec2 UV;
 
 out gl_PerVertex
 {
@@ -20,12 +14,8 @@ out gl_PerVertex
 };
 
 void main()
-{	
-	outNormal = normalize(normal);
-	outTangent = normalize(tangent);
-	outBitangent = normalize(cross(normal, tangent));
-	outColor = color;
-	outUV = uv;
-	gl_Position =  vec4(position, 1.0);
+{
+	UV = (vertexPosition_modelspace.xy+vec2(1,1))/2.0;
+	gl_Position =  vec4(vertexPosition_modelspace,1);
 }
 

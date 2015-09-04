@@ -17,26 +17,37 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Shaders", "Shaders", "{4154
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Vertex", "Vertex", "{DE81960A-EC1F-4135-BC58-1457CE90ABAC}"
 	ProjectSection(SolutionItems) = preProject
-		Applications\Shaders\Passthrough.vert = Applications\Shaders\Passthrough.vert
-		Applications\Shaders\SimpleTransform.vert = Applications\Shaders\SimpleTransform.vert
-		Applications\Shaders\SimpleVertexShader.vert = Applications\Shaders\SimpleVertexShader.vert
-		Applications\Shaders\StandardShadingRTT.vert = Applications\Shaders\StandardShadingRTT.vert
-		Applications\Shaders\TransformVertexShader.vert = Applications\Shaders\TransformVertexShader.vert
+		Assets\Shaders\Light.vert = Assets\Shaders\Light.vert
+		Assets\Shaders\Passthrough.vert = Assets\Shaders\Passthrough.vert
+		Assets\Shaders\RenderToTexture.vert = Assets\Shaders\RenderToTexture.vert
+		Assets\Shaders\SimpleTransform.vert = Assets\Shaders\SimpleTransform.vert
+		Assets\Shaders\SimpleVertexShader.vert = Assets\Shaders\SimpleVertexShader.vert
+		Assets\Shaders\StandardShadingRTT.vert = Assets\Shaders\StandardShadingRTT.vert
+		Assets\Shaders\TransformVertexShader.vert = Assets\Shaders\TransformVertexShader.vert
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Fragment", "Fragment", "{C0773C1F-78C7-41DF-948B-8927EBB0029B}"
 	ProjectSection(SolutionItems) = preProject
-		Applications\Shaders\ColorFragmentShader.frag = Applications\Shaders\ColorFragmentShader.frag
-		Applications\Shaders\SimpleFragmentShader.frag = Applications\Shaders\SimpleFragmentShader.frag
-		Applications\Shaders\SimpleTexture.frag = Applications\Shaders\SimpleTexture.frag
-		Applications\Shaders\SingleColor.frag = Applications\Shaders\SingleColor.frag
-		Applications\Shaders\StandardShadingRTT.frag = Applications\Shaders\StandardShadingRTT.frag
+		Assets\Shaders\ColorFragmentShader.frag = Assets\Shaders\ColorFragmentShader.frag
+		Assets\Shaders\CubeMapEnv.frag = Assets\Shaders\CubeMapEnv.frag
+		Assets\Shaders\Light.frag = Assets\Shaders\Light.frag
+		Assets\Shaders\Material.frag = Assets\Shaders\Material.frag
+		Assets\Shaders\Passthrough.frag = Assets\Shaders\Passthrough.frag
+		Assets\Shaders\RenderToTexture.frag = Assets\Shaders\RenderToTexture.frag
+		Assets\Shaders\SimpleFragmentShader.frag = Assets\Shaders\SimpleFragmentShader.frag
+		Assets\Shaders\SimpleTexture.frag = Assets\Shaders\SimpleTexture.frag
+		Assets\Shaders\SingleColor.frag = Assets\Shaders\SingleColor.frag
+		Assets\Shaders\StandardShadingRTT.frag = Assets\Shaders\StandardShadingRTT.frag
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Geometry", "Geometry", "{14237289-3CF1-4C3B-BDA3-503A6DF1E48C}"
 	ProjectSection(SolutionItems) = preProject
-		Applications\Shaders\NormalViewer.geom = Applications\Shaders\NormalViewer.geom
-		Passthrough.geom = Passthrough.geom
+		Assets\Shaders\CubeMapEnv.geom = Assets\Shaders\CubeMapEnv.geom
+		Assets\Shaders\Light.geom = Assets\Shaders\Light.geom
+		Assets\Shaders\NormalViewer.geom = Assets\Shaders\NormalViewer.geom
+		Assets\Shaders\Passthrough.geom = Assets\Shaders\Passthrough.geom
+		Assets\Shaders\Shadowmap.geom = Assets\Shaders\Shadowmap.geom
+		Assets\Shaders\ShadowmapLayered.geom = Assets\Shaders\ShadowmapLayered.geom
 	EndProjectSection
 EndProject
 Global

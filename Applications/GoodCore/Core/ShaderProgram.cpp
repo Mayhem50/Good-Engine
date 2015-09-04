@@ -134,9 +134,8 @@ ShaderVariablesList ShaderProgram::inputs() const
 
 	for (int idx = 0; idx < inputs; ++idx)
 	{
-		std::string name;
-		name.reserve(256);
-		glGetProgramResourceName(_id, GL_PROGRAM_INPUT, idx, 256, NULL, (GLchar*)name.c_str());
+		GLchar name[MAX_CHAR];
+		glGetProgramResourceName(_id, GL_PROGRAM_INPUT, idx, 256, NULL, (GLchar*)name);
 		glGetProgramResourceiv(_id, GL_PROGRAM_INPUT, idx, 1, props, 1, NULL, params);
 		list.push_back(ShaderVariable(name, params[0]));
 	}
@@ -154,9 +153,8 @@ ShaderVariablesList ShaderProgram::outputs() const
 
 	for (int idx = 0; idx < inputs; ++idx)
 	{
-		std::string name;
-		name.reserve(256);
-		glGetProgramResourceName(_id, GL_PROGRAM_OUTPUT, idx, 256, NULL, (GLchar*)name.c_str());
+		GLchar name[MAX_CHAR];
+		glGetProgramResourceName(_id, GL_PROGRAM_OUTPUT, idx, 256, NULL, (GLchar*)name);
 		glGetProgramResourceiv(_id, GL_PROGRAM_OUTPUT, idx, 1, props, 1, NULL, params);
 		list.push_back(ShaderVariable(name, params[0]));
 	}

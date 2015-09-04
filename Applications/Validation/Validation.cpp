@@ -31,6 +31,7 @@ ViewportPtr gViewport = nullptr;
 CameraPtr gCamera = nullptr;
 int whatRender = 0;
 bool showNormal = false;
+bool stopYaw = false;
 
 void renderToTexture(MaterialPtr material, FrameBufferObjectPtr fbo);
 
@@ -61,19 +62,22 @@ void renderToTexture(MaterialPtr material, FrameBufferObjectPtr fbo)
 	ShaderProgramPtr fragmentShader = material->fragmentShader();
 
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
-	glViewport(0, 0, 1024, 768);
+	//glViewport(0, 0, 1024, 768);
 
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 	switch (whatRender)
 	{
 	case 0:
-		glBindTexture(GL_TEXTURE_2D, fbo->colorBuffer());
+		glBindTexture(GL_TEXTURE_2D, fbo->colorBuffer(0));
 		break;
 	case 1:
-		glBindTexture(GL_TEXTURE_2D, fbo->normalBuffer());
+		glBindTexture(GL_TEXTURE_2D, fbo->colorBuffer(1));
 		break;
 	case 2:
+		glBindTexture(GL_TEXTURE_2D, fbo->colorBuffer(2));
+		break;
+	case 3:
 		glBindTexture(GL_TEXTURE_2D, fbo->depthBuffer());
 		break;
 	}
@@ -141,60 +145,24 @@ int main(int argc, char* argv[])
 
 	// Dark blue background
 	glClearColor(0.0f, 0.0f, 0.4f, 0.0f);
-
-	static const GLfloat cubeBufferData[] = {
-		-1.0f, -1.0f, -1.0f,
-		-1.0f, -1.0f, 1.0f,
-		-1.0f, 1.0f, 1.0f,
-		1.0f, 1.0f, -1.0f,
-		-1.0f, -1.0f, -1.0f,
-		-1.0f, 1.0f, -1.0f,
-		1.0f, -1.0f, 1.0f,
-		-1.0f, -1.0f, -1.0f,
-		1.0f, -1.0f, -1.0f,
-		1.0f, 1.0f, -1.0f,
-		1.0f, -1.0f, -1.0f,
-		-1.0f, -1.0f, -1.0f,
-		-1.0f, -1.0f, -1.0f,
-		-1.0f, 1.0f, 1.0f,
-		-1.0f, 1.0f, -1.0f,
-		1.0f, -1.0f, 1.0f,
-		-1.0f, -1.0f, 1.0f,
-		-1.0f, -1.0f, -1.0f,
-		-1.0f, 1.0f, 1.0f,
-		-1.0f, -1.0f, 1.0f,
-		1.0f, -1.0f, 1.0f,
-		1.0f, 1.0f, 1.0f,
-		1.0f, -1.0f, -1.0f,
-		1.0f, 1.0f, -1.0f,
-		1.0f, -1.0f, -1.0f,
-		1.0f, 1.0f, 1.0f,
-		1.0f, -1.0f, 1.0f,
-		1.0f, 1.0f, 1.0f,
-		1.0f, 1.0f, -1.0f,
-		-1.0f, 1.0f, -1.0f,
-		1.0f, 1.0f, 1.0f,
-		-1.0f, 1.0f, -1.0f,
-		-1.0f, 1.0f, 1.0f,
-		1.0f, 1.0f, 1.0f,
-		-1.0f, 1.0f, 1.0f,
-		1.0f, -1.0f, 1.0f
-	};
-
+		
 	GLSLPipelinePtr pipeline(new GLSLPipeline);
 
-	ShaderProgramPtr passthroughVS(new ShaderProgram(pipeline, "../Shaders/Passthrough.vert", GL_VERTEX_SHADER, "passthroughVS"));
-	ShaderProgramPtr transformVS(new ShaderProgram(pipeline, "../Shaders/SimpleTransform.vert", GL_VERTEX_SHADER, "transforVS"));
+	ShaderProgramPtr passthroughVS(new ShaderProgram(pipeline, "../../Assets/Shaders/Passthrough.vert", GL_VERTEX_SHADER, "passthroughVS"));
+	ShaderProgramPtr transformVS(new ShaderProgram(pipeline, "../../Assets/Shaders/SimpleTransform.vert", GL_VERTEX_SHADER, "transforVS"));
 
-	ShaderProgramPtr colorFS(new ShaderProgram(pipeline, "../Shaders/ColorFragmentShader.frag", GL_FRAGMENT_SHADER, "colorFragment"));
-	ShaderProgramPtr simpleFS(new ShaderProgram(pipeline, "../Shaders/SimpleFragmentShader.frag", GL_FRAGMENT_SHADER, "simpleFS"));
-	ShaderProgramPtr textureFS(new ShaderProgram(pipeline, "../Shaders/SimpleTexture.frag", GL_FRAGMENT_SHADER, "textureFS"));
+	ShaderProgramPtr colorFS(new ShaderProgram(pipeline, "../../Assets/Shaders/ColorFragmentShader.frag", GL_FRAGMENT_SHADER, "colorFragment"));
+	ShaderProgramPtr simpleFS(new ShaderProgram(pipeline, "../../Assets/Shaders/SimpleFragmentShader.frag", GL_FRAGMENT_SHADER, "simpleFS"));
+	ShaderProgramPtr textureFS(new ShaderProgram(pipeline, "../../Assets/Shaders/SimpleTexture.frag", GL_FRAGMENT_SHADER, "textureFS"));
 
-	ShaderProgramPtr passthroughGS(new ShaderProgram(pipeline, "../Shaders/Passthrough.geom", GL_GEOMETRY_SHADER, "passthroughGS"));
-	ShaderProgramPtr normalGS(new ShaderProgram(pipeline, "../Shaders/NormalViewer.geom", GL_GEOMETRY_SHADER, "normalGS"));
+	ShaderProgramPtr passthroughGS(new ShaderProgram(pipeline, "../../Assets/Shaders/Passthrough.geom", GL_GEOMETRY_SHADER, "passthroughGS"));
+	ShaderProgramPtr normalGS(new ShaderProgram(pipeline, "../../Assets/Shaders/NormalViewer.geom", GL_GEOMETRY_SHADER, "normalGS"));
 	
 	if (!pipeline->isValid())
 		return -5;
+
+	auto inputs = colorFS->inputs();
+	auto outputs = simpleFS->outputs();
 
 	MaterialPtr material(new Material(transformVS, colorFS));
 	MaterialPtr materialRTT(new Material(passthroughVS, textureFS));
@@ -202,37 +170,28 @@ int main(int argc, char* argv[])
 	std::vector<MeshPtr> MeshList;
 	int nbMesh = 0;
 
-	MeshPtr loadedMesh = GeometryLoader::load("X:\\DevGit\\Good-Engine\\Assets\\Objects\\suzanne.obj");
-	loadedMesh->setPosition(glm::vec3(0.0, 0.0, -1.0));
+	MeshPtr loadedMesh = GeometryLoader::load("..\\..\\Assets\\Objects\\suzanne.obj");
+	loadedMesh->setPosition(glm::vec3(0.2, 0.0, -1.0));
 	loadedMesh->setMaterial(material);
 	loadedMesh->init();
-	MeshList.push_back(loadedMesh);	
+	MeshList.push_back(loadedMesh);
 
-	for (int idMesh = 0; idMesh < nbMesh; ++idMesh)
-	{
-		MeshPtr mesh(new Mesh(NameTools::nameGenerator(), nullptr));
+	MeshPtr loadedMesh2 = GeometryLoader::load("..\\..\\Assets\\Objects\\suzanne.obj");
+	loadedMesh2->setPosition(glm::vec3(2, 1, -2.0));
+	loadedMesh2->setMaterial(material);
+	loadedMesh2->init();
+	MeshList.push_back(loadedMesh2);
 
-		for (int idx = 0; idx < sizeof(cubeBufferData) / 4; idx += 3)
-		{
-			Vertex vertex;
-
-			vertex.position = glm::vec3(cubeBufferData[idx], cubeBufferData[idx + 1], cubeBufferData[idx + 2]);
-			mesh->addVertex(vertex);
-		}
-
-		float posFactor = 0.1f * (float)idMesh;
-		mesh->setPosition(glm::vec3(posFactor));
-		mesh->setScale(glm::vec3(0.5, 1.0, 0.75));
-		mesh->setMaterial(material);
-		mesh->init();		
-
-		MeshList.push_back(mesh);
-	}
-
+	/*MeshPtr loadedMesh3 = GeometryLoader::load("..\\..\\Assets\\Objects\\sphere.obj");
+	loadedMesh3->setPosition(glm::vec3(-3, 0.5, -2.0));
+	loadedMesh3->setMaterial(material);
+	loadedMesh3->init();
+	MeshList.push_back(loadedMesh3);*/
+	
 	gViewport = ViewportPtr(new Viewport(0, 0, 1024, 768));
 	gCamera = CameraPtr(new Camera(gViewport));
 
-	FrameBufferObjectPtr fbo(new FrameBufferObject(gViewport->width(), gViewport->height()));
+	FrameBufferObjectPtr fbo(new FrameBufferObject(3, gViewport->width(), gViewport->height()));
 
 	glEnable(GL_CULL_FACE);
 	glEnable(GL_DEPTH_TEST);
@@ -250,7 +209,7 @@ int main(int argc, char* argv[])
 	glBindBuffer(GL_UNIFORM_BUFFER, bufferID);
 	glBufferData(GL_UNIFORM_BUFFER, sizeof(WorldTransform), NULL, GL_DYNAMIC_DRAW);
 
-	float angle = .001;
+	float angle = .01;
 	float xFactor = 0.0;
 
 	do{
@@ -263,23 +222,24 @@ int main(int argc, char* argv[])
 		glClearColor(0.3f, 0.3f, 0.3f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 		
-		for (int meshIndex = 0; meshIndex <= nbMesh; ++meshIndex)
+		for (auto mesh : MeshList)
 		{
-			MeshList[meshIndex]->yaw(angle);
+			if (!stopYaw)
+				mesh->yaw(angle);
+
 			transformVS->use();
 			glBindBufferBase(GL_UNIFORM_BUFFER, 0, bufferID);
 			WorldTransform *transform = (WorldTransform*)glMapBufferRange(GL_UNIFORM_BUFFER, 0, sizeof(WorldTransform), GL_MAP_WRITE_BIT | GL_MAP_INVALIDATE_BUFFER_BIT);
 				
-			transform->modelMatrix = MeshList[meshIndex]->localMatrix();
+			transform->modelMatrix = mesh->localMatrix();
 			transform->viewMatrix = gCamera->viewMatrix();
 			transform->projectionMatrix = gCamera->projectionMatrix();
-			glm::mat4 modelView = gCamera->viewMatrix() * MeshList[meshIndex]->localMatrix();
-			transform->normalMatrix = glm::transpose(glm::inverse(modelView));
+			glm::mat4 modelView = gCamera->viewMatrix() * mesh->localMatrix();
+			transform->normalMatrix = glm::transpose(glm::inverse(mesh->localMatrix()));
 
 			glUnmapBuffer(GL_UNIFORM_BUFFER);
-			glm::mat4 localToWorldMatrix = MeshList[meshIndex]->localMatrix();
-			MeshList[meshIndex]->draw();
-
+			glm::mat4 localToWorldMatrix = mesh->localMatrix();
+			mesh->draw();
 		}
 
 		fbo->unbind();
@@ -314,6 +274,40 @@ static void keyCallback(GLFWwindow* window, int key, int scanCode, int action, i
 
 void computeMotion(GLFWwindow* window, int key, int action)
 {
+	if (key == GLFW_KEY_P)
+	{
+		gCamera->setType(Camera::PERSPECTIVE);
+		return;
+	}
+
+	else if (key == GLFW_KEY_O)
+	{
+		gCamera->setType(Camera::ORTHOGRAPHIC);
+		return;
+	}
+
+	else if (key == GLFW_KEY_R && action == GLFW_PRESS)
+	{
+		if (whatRender == 3)
+			whatRender = 0;
+		else
+			++whatRender;
+
+		return;
+	}
+
+	else if (key == GLFW_KEY_N && action == GLFW_PRESS)
+	{
+		showNormal = !showNormal;
+		return;
+	}
+
+	else if (key == GLFW_KEY_S && action == GLFW_PRESS)
+	{
+		stopYaw = !stopYaw;
+		return;
+	}
+
 	static double lastTime = glfwGetTime();
 	static double hAngle = glm::pi<double>();
 	static double vAngle = 0.0;
@@ -355,25 +349,6 @@ void computeMotion(GLFWwindow* window, int key, int action)
 
 	else if (key == GLFW_KEY_LEFT)
 		position -= right * deltaTime * speed;
-
-	else if (key == GLFW_KEY_P)
-		gCamera->setType(Camera::PERSPECTIVE);
-
-	else if (key == GLFW_KEY_O)
-		gCamera->setType(Camera::ORTHOGRAPHIC);
-
-	else if (key == GLFW_KEY_R && action == GLFW_PRESS)
-	{
-		if (whatRender == 2)
-			whatRender = 0;
-		else
-			++whatRender;
-	}
-
-	else if (key == GLFW_KEY_N && action == GLFW_PRESS)
-	{
-		showNormal = !showNormal;
-	}
 
 	glm::vec3 up = glm::cross(right, direction);
 

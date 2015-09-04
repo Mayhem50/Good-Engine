@@ -183,6 +183,7 @@
     <ClInclude Include="Material.h" />
     <ClInclude Include="Mesh.h" />
     <ClInclude Include="SceneManager.h" />
+    <ClInclude Include="ShaderFramework.h" />
     <ClInclude Include="ShaderProgram.h" />
     <ClInclude Include="ShadersManager.h" />
     <ClInclude Include="ShaderTools.h" />

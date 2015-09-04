@@ -4,7 +4,7 @@
 layout(location = 0) out vec4 color;
 
 uniform sampler2D tex0;
-uniform bool linearize;
+uniform uint linearize;
 
 in vec2 UV;
 
@@ -14,7 +14,7 @@ float linearDepth(float depth)
 }
 void main()
 {
-	if(linearize)
+	if(linearize == 3)
 		color = vec4(linearDepth(texture(tex0, UV.xy).r));
 	else
 		color = texture(tex0, UV.xy);

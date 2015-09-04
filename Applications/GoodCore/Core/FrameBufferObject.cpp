@@ -5,16 +5,18 @@ using namespace Good;
 const int FrameBufferObject::DEFAULT_WIDTH = 2048;
 const int FrameBufferObject::DEFAULT_HEIGHT = 2048;
 
-FrameBufferObject::FrameBufferObject() :
+FrameBufferObject::FrameBufferObject(unsigned int colorBufferCount) :
 _width(DEFAULT_WIDTH),
-_height(DEFAULT_HEIGHT)
+_height(DEFAULT_HEIGHT), 
+_colorBufferCount(colorBufferCount)
 {
 	_isValid = _init();
 }
 
-FrameBufferObject::FrameBufferObject(int width, int height):
+FrameBufferObject::FrameBufferObject(unsigned int colorBufferCount, int width, int height) :
 _width(width),
-_height(height)
+_height(height), 
+_colorBufferCount(colorBufferCount)
 {
 	if (_width < 0)
 		_width = DEFAULT_WIDTH;
@@ -26,10 +28,11 @@ _height(height)
 
 FrameBufferObject::~FrameBufferObject()
 {
-	glDeleteTextures(1, &_colorTex);
-	glDeleteTextures(1, &_normalTex);
+	glDeleteTextures(_colorBufferCount, _colorTex);
 	glDeleteTextures(1, &_depthTex);
 	glDeleteFramebuffers(1, &_frameBufferID);
+	delete[] _colorTex;
+	delete[] _drawBuffer;
 }
 
 bool FrameBufferObject::_init()
@@ -37,19 +40,17 @@ bool FrameBufferObject::_init()
 	glGenFramebuffers(1, &_frameBufferID);
 	glBindFramebuffer(GL_FRAMEBUFFER, _frameBufferID);
 
-	glGenTextures(1, &_colorTex);
-	glBindTexture(GL_TEXTURE_2D, _colorTex);
-	glTexStorage2D(GL_TEXTURE_2D, 1, GL_RGBA8, _width, _height);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-	glBindTexture(GL_TEXTURE_2D, 0);
+	_colorTex = new GLuint[_colorBufferCount];
+	glGenTextures(_colorBufferCount, _colorTex);
 
-	glGenTextures(1, &_normalTex);
-	glBindTexture(GL_TEXTURE_2D, _normalTex);
-	glTexStorage2D(GL_TEXTURE_2D, 1, GL_RGBA8, _width, _height);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-	glBindTexture(GL_TEXTURE_2D, 0);
+	for (unsigned int idx = 0; idx < _colorBufferCount; ++idx)
+	{
+		glBindTexture(GL_TEXTURE_2D, _colorTex[idx]);
+		glTexStorage2D(GL_TEXTURE_2D, 1, GL_RGBA8, _width, _height);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+		glBindTexture(GL_TEXTURE_2D, 0);
+	}
 
 	//glGenRenderbuffers(1, &_depthBufferID);
 	//glBindRenderbuffer(GL_RENDERBUFFER, _depthBufferID);
@@ -61,13 +62,17 @@ bool FrameBufferObject::_init()
 	glTexStorage2D(GL_TEXTURE_2D, 1, GL_DEPTH_COMPONENT32F, _width, _height);
 	glBindTexture(GL_TEXTURE_2D, 0);
 	
-	glFramebufferTexture(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, _colorTex, 0);
-	glFramebufferTexture(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT1, _normalTex, 0);
+	for (unsigned int idx = 0; idx < _colorBufferCount; ++idx)
+		glFramebufferTexture(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0 + idx, _colorTex[idx], 0);
+
 	glFramebufferTexture(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, _depthTex, 0);
 
-	GLuint drawBuffer[] = { GL_COLOR_ATTACHMENT0, GL_COLOR_ATTACHMENT1 };
-	glDrawBuffers(2, drawBuffer);
+	_drawBuffer = new GLuint[_colorBufferCount];
 
+	for (unsigned int idx = 0; idx < _colorBufferCount; ++idx)
+		_drawBuffer[idx] = GL_COLOR_ATTACHMENT0 + idx;
+
+	glDrawBuffers(_colorBufferCount, _drawBuffer);
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
 
 	if (glCheckFramebufferStatus(GL_FRAMEBUFFER) == GL_FRAMEBUFFER_COMPLETE)
@@ -86,14 +91,12 @@ GLuint FrameBufferObject::id() const
 	return _frameBufferID;
 }
 
-GLuint FrameBufferObject::colorBuffer() const
+GLuint FrameBufferObject::colorBuffer(unsigned int index) const
 {
-	return _colorTex;
-}
+	if (index >= _colorBufferCount)
+		return 0;
 
-GLuint FrameBufferObject::normalBuffer() const
-{
-	return _normalTex;
+	return _colorTex[index];
 }
 
 GLuint FrameBufferObject::depthBuffer() const

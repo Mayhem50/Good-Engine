@@ -3,22 +3,15 @@
 layout(triangles) in;
 layout (line_strip, max_vertices = 6) out;
 
-layout (location = 0) in vec3 normal[];
-layout (location = 1) in vec3 tangent[];
-layout (location = 2) in vec3 bitangent[];
-layout (location = 3) in vec3 color[];
-layout (location = 4) in vec2 uv[];
+in vec3 normal[];
 
 out Data
 {
 	vec3 normal;
-	vec3 tangent;
-	vec3 bitangent;
 	vec3 eyePos;
 	vec3 lightDir;
-	vec3 color;
-	vec2 uv;
 	float attenuation;
+	vec3 color;
 } outData;
 
 layout (std140, binding = 0) uniform WorldDataBlock
@@ -55,24 +48,20 @@ void main()
 		vec3 pos = (MV * gl_in[idx].gl_Position).xyz;
 		vec3 lightPos = (worldData.viewMatrix * vec4(lightPosition, 1.0)).xyz;
 
-		float NoV = dot(normal[idx], -pos);
+		outData.normal = normalize(mat3(worldData.normalMatrix) * normal[idx]);
+		outData.lightDir = normalize(lightPos - pos);
+		outData.eyePos = normalize(worldData.viewMatrix * vec4(-pos, 1.0)).xyz;
+
+		float distance = length(lightPos - pos);
+		outData.attenuation = 1.0 / (distance * distance);
+
+		gl_Position = MVP *  gl_in[idx].gl_Position;
+		EmitVertex();
 		
-		if(NoV > 0)
-		{		
-			outData.normal = normalize(mat3(worldData.normalMatrix) * normal[idx]);
-			outData.lightDir = normalize(lightPos - pos);
-			outData.eyePos = normalize(worldData.viewMatrix * vec4(-pos, 1.0)).xyz;
+		gl_Position = MVP * vec4(gl_in[idx].gl_Position.xyz + normal[idx] * .2, 1.0);
+		EmitVertex();
 
-			float distance = length(lightPos - pos);
-			outData.attenuation = 1.0 / (distance * distance);
+		EndPrimitive();
+	}
 
-			gl_Position = MVP *  gl_in[idx].gl_Position;
-			EmitVertex();
-			
-			gl_Position = MVP * vec4(gl_in[idx].gl_Position.xyz + normal[idx] * .2, 1.0);
-			EmitVertex();
-
-			EndPrimitive();
-		}
-	}	
 }
