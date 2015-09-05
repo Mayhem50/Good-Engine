@@ -1,50 +1,29 @@
 #pragma once
 
-#include "ShaderProgram.h"
+#include "GoodFoundation.h"
 
 #include <memory>
+#include <GL\glew.h>
 
 namespace Good
 {
-	class GOOD_DLL Material
+	struct GOOD_DLL Material
 	{
-	public:
-		Material(ShaderProgramPtr vertexShader, ShaderProgramPtr fragmentShader, ShaderProgramPtr geometryShader = ShaderProgram::EMPY_PROGRAM, ShaderProgramPtr tessControlShader = ShaderProgram::EMPY_PROGRAM, ShaderProgramPtr tessEvalShader = ShaderProgram::EMPY_PROGRAM);
+		Material();
 
-		void use();
-
-		ShaderProgramPtr vertexShader() const;
-		ShaderProgramPtr fragmentShader() const;
-
-	private:
-		void _updateUniforms();
-
-		ShaderProgramPtr _vertexShader;
-		ShaderProgramPtr _fragmentShader;
-		ShaderProgramPtr _geometryShader;
-		ShaderProgramPtr _tessControlShader;
-		ShaderProgramPtr _tessEvalShader;
-
-		struct Data
+		struct Parameters
 		{
 			glm::vec4 diffuseColor;
 			glm::vec4 specularColor;
 			glm::vec4 emissiveColor;
-
 			float metalic;
 			float shinyness;
 			float roughness;
-			float opacity;
-			float refraction;
+			float shinyness2;
+			float roughness2;
 		};
 
-		Data _data;
-		GLuint _dataUniformBlockID;
-
-		GLuint _alphaMap;
-		GLuint _normalMap;
-
-		static const GLchar* UNIFORM_BLOCK_NAMES;
+		Parameters parameters;
 	};
 
 	typedef std::shared_ptr<Material> MaterialPtr;

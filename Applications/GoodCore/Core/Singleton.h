@@ -1,5 +1,7 @@
 #pragma once
 
+#include "GoodFoundation.h"
+
 namespace Good
 {
 	template <typename T>

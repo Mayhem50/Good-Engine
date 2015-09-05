@@ -23,7 +23,6 @@ namespace Good
 		virtual bool init();
 		virtual float draw();
 		virtual bool shutdown();
-#pragma endregion
 
 		VerticesList vertices() const;
 		unsigned int addVertex(Vertex& vertex);
@@ -39,6 +38,7 @@ namespace Good
 		void createTriangles(const Vertex& v1, const Vertex& v2, const Vertex& v3);
 
 		void setMaterial(MaterialPtr material);
+		MaterialPtr material() const;
 
 	private:
 		void _createVertexBufferData();

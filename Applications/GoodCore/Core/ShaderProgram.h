@@ -15,20 +15,18 @@ namespace Good
 {
 	typedef std::tuple<std::string, GLenum> ShaderVariable;
 	typedef std::vector<ShaderVariable> ShaderVariablesList;
-
-	class GLSLPipeline;
-	typedef std::shared_ptr<GLSLPipeline> GLSLPipelinePtr;
-
+	
 	class ShaderProgram;
-	typedef std::vector<ShaderProgram*> ShaderProgramsList;
 	typedef std::shared_ptr<ShaderProgram> ShaderProgramPtr;
-	typedef std::vector<ShaderProgramPtr> ShaderProgramsPtrList;
+	typedef std::vector<ShaderProgramPtr> ShaderProgramsList;
 	typedef std::map<ShaderProgramPtr, std::string> ShaderProgramsMap;
 
 	class GOOD_DLL ShaderProgram : public GoodObject
 	{
 	public:
-		ShaderProgram(GLSLPipelinePtr pipeline, const char* sourceFile, GLenum type, const char* name = nullptr);
+		static const ShaderProgramPtr EMPTY_SHADER_PROGRAM;
+		static ShaderProgramPtr CreateShaderProgramFromFile(const char* fileName, GLenum type, const char* name = nullptr);
+		static ShaderProgramPtr CreateShaderProgramFromSource(const char* source, GLenum type, const char* name = nullptr);
 		~ShaderProgram();
 
 		GLenum type() const;
@@ -43,9 +41,14 @@ namespace Good
 		void use() const;
 		void unsuse() const;
 
-		static const ShaderProgramPtr EMPY_PROGRAM;
-
 	private:
+		ShaderProgram(const char* fileName, GLenum type, const char* name);
+		ShaderProgram(GLenum type, const char* fileName, const char* name);
+
+		bool _readSourceFromFile(const char* fileName);
+		void _setBitField();
+		bool _build();
+
 		GLuint _id;
 		GLenum _type;
 		GLbitfield _bitField;
@@ -55,12 +58,6 @@ namespace Good
 		std::string _name;
 		std::string _code;
 		std::string _log;
-
-		GLSLPipelinePtr _pipeline;
-
-
-#ifdef _DEBUG
-		
-#endif
 	};
+
 }

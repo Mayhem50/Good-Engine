@@ -16,11 +16,12 @@
 #include <glm/gtc/constants.hpp>
 #include <glm/gtc/type_ptr.hpp>
 
-#include "../GoodCore/Core/GLSLPipeline.h"
+#include "../GoodCore/Core/ShaderPipeline.h"
 #include "../GoodCore/Core/LoaderObj.h"
 #include "../GoodCore/Core/Mesh.h"
 #include "../GoodCore/Core/FrameBufferObject.h"
 #include "../GoodCore/Core/Camera.h"
+#include "../GoodCore/Core/MaterialPipeline.h"
 
 static void keyCallback(GLFWwindow* window, int key, int scanCode, int action, int mods);
 void computeMotion(GLFWwindow* window, int key, int action);
@@ -33,11 +34,11 @@ int whatRender = 0;
 bool showNormal = false;
 bool stopYaw = false;
 
-void renderToTexture(MaterialPtr material, FrameBufferObjectPtr fbo);
+void renderToTexture(ShaderPipelinePtr pipeline, FrameBufferObjectPtr fbo);
 
-void renderToTexture(MaterialPtr material, FrameBufferObjectPtr fbo)
+void renderToTexture(ShaderPipelinePtr pipeline, FrameBufferObjectPtr fbo)
 {
-	material->use();
+	pipeline->use();
 
 	glDisable(GL_DEPTH_TEST);
 	GLuint quad_VertexArrayID;
@@ -59,7 +60,7 @@ void renderToTexture(MaterialPtr material, FrameBufferObjectPtr fbo)
 	glBufferData(GL_ARRAY_BUFFER, sizeof(g_quad_vertex_buffer_data), g_quad_vertex_buffer_data, GL_STATIC_DRAW);
 
 	// Create and compile our GLSL program from the shaders
-	ShaderProgramPtr fragmentShader = material->fragmentShader();
+	ShaderProgramPtr fragmentShader = pipeline->fragmentShader();
 
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
 	//glViewport(0, 0, 1024, 768);
@@ -146,26 +147,21 @@ int main(int argc, char* argv[])
 	// Dark blue background
 	glClearColor(0.0f, 0.0f, 0.4f, 0.0f);
 		
-	GLSLPipelinePtr pipeline(new GLSLPipeline);
+	ShaderPipelinePtr renderToTexturePipeline(new ShaderPipeline);
 
-	ShaderProgramPtr passthroughVS(new ShaderProgram(pipeline, "../../Assets/Shaders/Passthrough.vert", GL_VERTEX_SHADER, "passthroughVS"));
-	ShaderProgramPtr transformVS(new ShaderProgram(pipeline, "../../Assets/Shaders/SimpleTransform.vert", GL_VERTEX_SHADER, "transforVS"));
+	ShaderProgramPtr passthroughVS = ShaderProgram::CreateShaderProgramFromFile("../../Assets/Shaders/Passthrough.vert", GL_VERTEX_SHADER, "passthroughVS");
+	ShaderProgramPtr textureFS = ShaderProgram::CreateShaderProgramFromFile("../../Assets/Shaders/SimpleTexture.frag", GL_FRAGMENT_SHADER, "textureFS");
+	ShaderProgramPtr normalGS = ShaderProgram::CreateShaderProgramFromFile("../../Assets/Shaders/NormalViewer.geom", GL_GEOMETRY_SHADER, "normalGS");
 
-	ShaderProgramPtr colorFS(new ShaderProgram(pipeline, "../../Assets/Shaders/ColorFragmentShader.frag", GL_FRAGMENT_SHADER, "colorFragment"));
-	ShaderProgramPtr simpleFS(new ShaderProgram(pipeline, "../../Assets/Shaders/SimpleFragmentShader.frag", GL_FRAGMENT_SHADER, "simpleFS"));
-	ShaderProgramPtr textureFS(new ShaderProgram(pipeline, "../../Assets/Shaders/SimpleTexture.frag", GL_FRAGMENT_SHADER, "textureFS"));
-
-	ShaderProgramPtr passthroughGS(new ShaderProgram(pipeline, "../../Assets/Shaders/Passthrough.geom", GL_GEOMETRY_SHADER, "passthroughGS"));
-	ShaderProgramPtr normalGS(new ShaderProgram(pipeline, "../../Assets/Shaders/NormalViewer.geom", GL_GEOMETRY_SHADER, "normalGS"));
+	renderToTexturePipeline->addProgram(passthroughVS);
+	renderToTexturePipeline->addProgram(textureFS);
 	
-	if (!pipeline->isValid())
+	if (!renderToTexturePipeline->isValid())
 		return -5;
 
-	auto inputs = colorFS->inputs();
-	auto outputs = simpleFS->outputs();
 
-	MaterialPtr material(new Material(transformVS, colorFS));
-	MaterialPtr materialRTT(new Material(passthroughVS, textureFS));
+	MaterialPtr material(new Material);
+	MaterialPipelinePtr materialPipeline(new MaterialPipeline);
 
 	std::vector<MeshPtr> MeshList;
 	int nbMesh = 0;
@@ -214,10 +210,11 @@ int main(int argc, char* argv[])
 
 	do{
 		fbo->bind();
-		if (showNormal)
-			normalGS->use();
-		else
-			passthroughGS->use();
+
+		//if (showNormal)
+		//	normalGS->use();
+		//else
+		//	passthroughGS->use();
 
 		glClearColor(0.3f, 0.3f, 0.3f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -226,26 +223,15 @@ int main(int argc, char* argv[])
 		{
 			if (!stopYaw)
 				mesh->yaw(angle);
-
-			transformVS->use();
-			glBindBufferBase(GL_UNIFORM_BUFFER, 0, bufferID);
-			WorldTransform *transform = (WorldTransform*)glMapBufferRange(GL_UNIFORM_BUFFER, 0, sizeof(WorldTransform), GL_MAP_WRITE_BIT | GL_MAP_INVALIDATE_BUFFER_BIT);
-				
-			transform->modelMatrix = mesh->localMatrix();
-			transform->viewMatrix = gCamera->viewMatrix();
-			transform->projectionMatrix = gCamera->projectionMatrix();
-			glm::mat4 modelView = gCamera->viewMatrix() * mesh->localMatrix();
-			transform->normalMatrix = glm::transpose(glm::inverse(mesh->localMatrix()));
-
-			glUnmapBuffer(GL_UNIFORM_BUFFER);
+						
+			materialPipeline->update(mesh, gCamera);
+			
 			glm::mat4 localToWorldMatrix = mesh->localMatrix();
 			mesh->draw();
 		}
 
 		fbo->unbind();
-		passthroughGS->unsuse();
-		normalGS->unsuse();
-		renderToTexture(materialRTT, fbo);
+		renderToTexture(renderToTexturePipeline, fbo);
 
 		// Swap buffers
 		glfwSwapBuffers(window);

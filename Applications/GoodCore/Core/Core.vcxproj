@@ -170,7 +170,8 @@
     <ClInclude Include="Camera.h" />
     <ClInclude Include="CameraMotion.h" />
     <ClInclude Include="FrameBufferObject.h" />
-    <ClInclude Include="GLSLPipeline.h" />
+    <ClInclude Include="MaterialPipeline.h" />
+    <ClInclude Include="ShaderPipeline.h" />
     <ClInclude Include="GLSLProgram.h" />
     <ClInclude Include="GoodFoundation.h" />
     <ClInclude Include="IRenderable.h" />
@@ -196,7 +197,8 @@
     <ClCompile Include="Camera.cpp" />
     <ClCompile Include="CameraMotion.cpp" />
     <ClCompile Include="FrameBufferObject.cpp" />
-    <ClCompile Include="GLSLPipeline.cpp" />
+    <ClCompile Include="MaterialPipeline.cpp" />
+    <ClCompile Include="ShaderPipeline.cpp" />
     <ClCompile Include="GLSLProgram.cpp" />
     <ClCompile Include="GoodObject.h" />
     <ClCompile Include="ISceneNode.cpp" />
