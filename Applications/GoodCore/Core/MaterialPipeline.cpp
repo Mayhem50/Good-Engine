@@ -10,9 +10,9 @@ namespace Good
 	MaterialPipeline::MaterialPipeline()
 	{
 		_pipeline = ShaderPipelinePtr(new ShaderPipeline);
-		_vertexShader = ShaderProgram::CreateShaderProgramFromFile("../../Assets/Shaders/Passthrough.vert", GL_VERTEX_SHADER, "passthroughVS");
-		_framgentShader = ShaderProgram::CreateShaderProgramFromFile("../../Assets/Shaders/ColorFragmentShader.frag", GL_FRAGMENT_SHADER, "colorFragment");
-		_geometryShader = ShaderProgram::CreateShaderProgramFromFile("../../Assets/Shaders/Passthrough.geom", GL_GEOMETRY_SHADER, "passthroughGS");
+		_vertexShader = ShaderProgram::CreateShaderProgramFromFile("../../Assets/Shaders/MaterialPipelineVertexShader.vert", GL_VERTEX_SHADER, "passthroughVS");
+		_framgentShader = ShaderProgram::CreateShaderProgramFromFile("../../Assets/Shaders/MaterialPipelineFragmentShader.frag", GL_FRAGMENT_SHADER, "colorFragment");
+		_geometryShader = ShaderProgram::CreateShaderProgramFromFile("../../Assets/Shaders/MaterialPipelineGeometryShader.geom", GL_GEOMETRY_SHADER, "passthroughGS");
 		
 		_pipeline->addProgram(_vertexShader);
 		_pipeline->addProgram(_geometryShader);

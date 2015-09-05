@@ -1,31 +1,5 @@
-﻿La génération a démarré 9/5/2015 5:54:55 PM.
-     1>Projet "X:\DevGit\Good-Engine\Applications\Validation\Validation.vcxproj" sur le nœud 2 (Build cible(s)).
-     1>ClCompile:
-         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\x86_amd64\CL.exe /c /I"X:\ThirdParties\assimp-3.1.1\include" /I"X:\ThirdParties\glew-1.13.0\include" /I"X:\ThirdParties\glfw-3.1.1\include" /I"X:\ThirdParties\glm-0.9.7.0\include" /Zi /nologo /W3 /WX- /Od /D WIN32 /D _DEBUG /D _WINDOWS /D _UNICODE /D UNICODE /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"x64\Debug\\" /Fd"x64\Debug\vc120.pdb" /FR"x64\Debug\\" /Gd /TP /analyze- /errorReport:prompt Validation.cpp
-         Validation.cpp
-     1>Validation.cpp(208): warning C4305: 'initialisation' : troncation de 'double' à 'float'
-     1>Validation.cpp(306): warning C4305: 'initialisation' : troncation de 'double' à 'float'
-       Link:
-         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\x86_amd64\link.exe /ERRORREPORT:PROMPT /OUT:"X:\DevGit\Good-Engine\build\x64\Debug\Validation.exe" /INCREMENTAL /NOLOGO /LIBPATH:"X:\DevGit\Good-Engine\build\x64\Debug\\" /LIBPATH:"X:\ThirdParties\assimp-3.1.1\lib\x64\Debug" /LIBPATH:"X:\ThirdParties\glew-1.13.0\lib\x64\Debug" /LIBPATH:"X:\ThirdParties\glfw-3.1.1\lib\x64\Debug" opengl32.lib Core.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib assimp.lib glew32.lib glfw3.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"X:\DevGit\Good-Engine\build\x64\Debug\Validation.pdb" /SUBSYSTEM:CONSOLE /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"X:\DevGit\Good-Engine\build\x64\Debug\Validation.lib" /MACHINE:X64 x64\Debug\Validation.res
-         x64\Debug\Validation.obj
-         "X:\DevGit\Good-Engine\build\x64\Debug\Core.lib"
-     1>glfw3.lib(context.obj) : warning LNK4099: PDB 'vc120.pdb' n'a pu Ûtre trouvÚ avec 'glfw3.lib(context.obj)' ou sur 'X:\DevGit\Good-Engine\build\x64\Debug\vc120.pdb'á; l'objet sera liÚ sans informations de dÚbogage
-     1>glfw3.lib(init.obj) : warning LNK4099: PDB 'vc120.pdb' n'a pu Ûtre trouvÚ avec 'glfw3.lib(init.obj)' ou sur 'X:\DevGit\Good-Engine\build\x64\Debug\vc120.pdb'á; l'objet sera liÚ sans informations de dÚbogage
-     1>glfw3.lib(input.obj) : warning LNK4099: PDB 'vc120.pdb' n'a pu Ûtre trouvÚ avec 'glfw3.lib(input.obj)' ou sur 'X:\DevGit\Good-Engine\build\x64\Debug\vc120.pdb'á; l'objet sera liÚ sans informations de dÚbogage
-     1>glfw3.lib(monitor.obj) : warning LNK4099: PDB 'vc120.pdb' n'a pu Ûtre trouvÚ avec 'glfw3.lib(monitor.obj)' ou sur 'X:\DevGit\Good-Engine\build\x64\Debug\vc120.pdb'á; l'objet sera liÚ sans informations de dÚbogage
-     1>glfw3.lib(window.obj) : warning LNK4099: PDB 'vc120.pdb' n'a pu Ûtre trouvÚ avec 'glfw3.lib(window.obj)' ou sur 'X:\DevGit\Good-Engine\build\x64\Debug\vc120.pdb'á; l'objet sera liÚ sans informations de dÚbogage
-     1>glfw3.lib(win32_init.obj) : warning LNK4099: PDB 'vc120.pdb' n'a pu Ûtre trouvÚ avec 'glfw3.lib(win32_init.obj)' ou sur 'X:\DevGit\Good-Engine\build\x64\Debug\vc120.pdb'á; l'objet sera liÚ sans informations de dÚbogage
-     1>glfw3.lib(win32_monitor.obj) : warning LNK4099: PDB 'vc120.pdb' n'a pu Ûtre trouvÚ avec 'glfw3.lib(win32_monitor.obj)' ou sur 'X:\DevGit\Good-Engine\build\x64\Debug\vc120.pdb'á; l'objet sera liÚ sans informations de dÚbogage
-     1>glfw3.lib(win32_time.obj) : warning LNK4099: PDB 'vc120.pdb' n'a pu Ûtre trouvÚ avec 'glfw3.lib(win32_time.obj)' ou sur 'X:\DevGit\Good-Engine\build\x64\Debug\vc120.pdb'á; l'objet sera liÚ sans informations de dÚbogage
-     1>glfw3.lib(win32_tls.obj) : warning LNK4099: PDB 'vc120.pdb' n'a pu Ûtre trouvÚ avec 'glfw3.lib(win32_tls.obj)' ou sur 'X:\DevGit\Good-Engine\build\x64\Debug\vc120.pdb'á; l'objet sera liÚ sans informations de dÚbogage
-     1>glfw3.lib(win32_window.obj) : warning LNK4099: PDB 'vc120.pdb' n'a pu Ûtre trouvÚ avec 'glfw3.lib(win32_window.obj)' ou sur 'X:\DevGit\Good-Engine\build\x64\Debug\vc120.pdb'á; l'objet sera liÚ sans informations de dÚbogage
-     1>glfw3.lib(winmm_joystick.obj) : warning LNK4099: PDB 'vc120.pdb' n'a pu Ûtre trouvÚ avec 'glfw3.lib(winmm_joystick.obj)' ou sur 'X:\DevGit\Good-Engine\build\x64\Debug\vc120.pdb'á; l'objet sera liÚ sans informations de dÚbogage
-     1>glfw3.lib(wgl_context.obj) : warning LNK4099: PDB 'vc120.pdb' n'a pu Ûtre trouvÚ avec 'glfw3.lib(wgl_context.obj)' ou sur 'X:\DevGit\Good-Engine\build\x64\Debug\vc120.pdb'á; l'objet sera liÚ sans informations de dÚbogage
-         Validation.vcxproj -> X:\DevGit\Good-Engine\build\x64\Debug\Validation.exe
-       BscMake:
-         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\bscmake.exe /nologo /o"X:\DevGit\Good-Engine\build\x64\Debug\Validation.bsc" /n x64\Debug\Validation.sbr
-     1>Génération du projet "X:\DevGit\Good-Engine\Applications\Validation\Validation.vcxproj" terminée (Build cible(s)).
+﻿La génération a démarré 9/6/2015 1:09:55 AM.
 
 La génération a réussi.
 
-Temps écoulé 00:00:06.43
+Temps écoulé 00:00:00.03

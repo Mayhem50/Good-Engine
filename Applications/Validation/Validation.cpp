@@ -160,21 +160,26 @@ int main(int argc, char* argv[])
 		return -5;
 
 
-	MaterialPtr material(new Material);
 	MaterialPipelinePtr materialPipeline(new MaterialPipeline);
+
+	MaterialPtr plastic(new Material);
+	MaterialPtr metal(new Material);
+
+	metal->parameters.metalic = 1.0;
+
 
 	std::vector<MeshPtr> MeshList;
 	int nbMesh = 0;
 
 	MeshPtr loadedMesh = GeometryLoader::load("..\\..\\Assets\\Objects\\suzanne.obj");
 	loadedMesh->setPosition(glm::vec3(0.2, 0.0, -1.0));
-	loadedMesh->setMaterial(material);
+	loadedMesh->setMaterial(plastic);
 	loadedMesh->init();
 	MeshList.push_back(loadedMesh);
 
 	MeshPtr loadedMesh2 = GeometryLoader::load("..\\..\\Assets\\Objects\\suzanne.obj");
 	loadedMesh2->setPosition(glm::vec3(2, 1, -2.0));
-	loadedMesh2->setMaterial(material);
+	loadedMesh2->setMaterial(metal);
 	loadedMesh2->init();
 	MeshList.push_back(loadedMesh2);
 

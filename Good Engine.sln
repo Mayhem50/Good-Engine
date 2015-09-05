@@ -18,20 +18,19 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Vertex", "Vertex", "{DE81960A-EC1F-4135-BC58-1457CE90ABAC}"
 	ProjectSection(SolutionItems) = preProject
 		Assets\Shaders\Light.vert = Assets\Shaders\Light.vert
+		Assets\Shaders\MaterialPipelineVertexShader.vert = Assets\Shaders\MaterialPipelineVertexShader.vert
 		Assets\Shaders\Passthrough.vert = Assets\Shaders\Passthrough.vert
 		Assets\Shaders\RenderToTexture.vert = Assets\Shaders\RenderToTexture.vert
-		Assets\Shaders\SimpleTransform.vert = Assets\Shaders\SimpleTransform.vert
-		Assets\Shaders\SimpleVertexShader.vert = Assets\Shaders\SimpleVertexShader.vert
 		Assets\Shaders\StandardShadingRTT.vert = Assets\Shaders\StandardShadingRTT.vert
 		Assets\Shaders\TransformVertexShader.vert = Assets\Shaders\TransformVertexShader.vert
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Fragment", "Fragment", "{C0773C1F-78C7-41DF-948B-8927EBB0029B}"
 	ProjectSection(SolutionItems) = preProject
-		Assets\Shaders\ColorFragmentShader.frag = Assets\Shaders\ColorFragmentShader.frag
 		Assets\Shaders\CubeMapEnv.frag = Assets\Shaders\CubeMapEnv.frag
 		Assets\Shaders\Light.frag = Assets\Shaders\Light.frag
 		Assets\Shaders\Material.frag = Assets\Shaders\Material.frag
+		Assets\Shaders\MaterialPipelineFragmentShader.frag = Assets\Shaders\MaterialPipelineFragmentShader.frag
 		Assets\Shaders\Passthrough.frag = Assets\Shaders\Passthrough.frag
 		Assets\Shaders\RenderToTexture.frag = Assets\Shaders\RenderToTexture.frag
 		Assets\Shaders\SimpleFragmentShader.frag = Assets\Shaders\SimpleFragmentShader.frag
@@ -44,10 +43,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Geometry", "Geometry", "{14
 	ProjectSection(SolutionItems) = preProject
 		Assets\Shaders\CubeMapEnv.geom = Assets\Shaders\CubeMapEnv.geom
 		Assets\Shaders\Light.geom = Assets\Shaders\Light.geom
+		Assets\Shaders\MaterialPipelineGeometryShader.geom = Assets\Shaders\MaterialPipelineGeometryShader.geom
 		Assets\Shaders\NormalViewer.geom = Assets\Shaders\NormalViewer.geom
-		Assets\Shaders\Passthrough.geom = Assets\Shaders\Passthrough.geom
-		Assets\Shaders\Shadowmap.geom = Assets\Shaders\Shadowmap.geom
-		Assets\Shaders\ShadowmapLayered.geom = Assets\Shaders\ShadowmapLayered.geom
 	EndProjectSection
 EndProject
 Global
