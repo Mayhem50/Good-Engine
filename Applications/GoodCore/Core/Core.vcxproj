@@ -64,6 +64,7 @@
     <Import Project="..\..\..\PropertiesSheets\GLEW.props" />
     <Import Project="..\..\..\PropertiesSheets\Assimp.props" />
     <Import Project="..\..\..\PropertiesSheets\Boost.props" />
+    <Import Project="..\..\..\PropertiesSheets\OpenSSL.props" />
   </ImportGroup>
   <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="PropertySheets">
     <Import Project="..\..\..\PropertiesSheets\Common.props" />

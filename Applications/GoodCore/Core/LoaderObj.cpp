@@ -11,68 +11,59 @@
 #include <windows.h>
 #include <process.h>
 
+#include <openssl\sha.h>
+
 namespace Good
 {
-	HANDLE mutex;
-	const unsigned int MAX_THREAD = 8;
+#define SHA_KEY_LENGH 65
 
-	struct FaceTrunck
-	{
-		unsigned int start;
-		unsigned int end;
-		aiMesh* iMesh;
-		MeshPtr mesh;
-		unsigned int threadID;
-	};
-
-	std::vector<std::string> &split(const std::string &s, char delim, std::vector<std::string> &elems) {
+	std::vector<std::string> split(const std::string &s, char delim) {
+		std::vector<std::string> elems;
 		std::stringstream ss(s);
 		std::string item;
 		while (std::getline(ss, item, delim)) {
 			elems.push_back(item);
 		}
 		return elems;
-	}
-
-
-	std::vector<std::string> split(const std::string &s, char delim) {
-		std::vector<std::string> elems;
-		split(s, delim, elems);
 		return elems;
 	}
+	void sha256_hash_string(unsigned char hash[SHA256_DIGEST_LENGTH], char outputBuffer[65]);
 
-	void batchFaces(void* data)
+	int calc_sha256(const char* path, char output[SHA_KEY_LENGH])
 	{
-		WaitForSingleObject(mutex, INFINITE);
-		FaceTrunck* trunk = static_cast<FaceTrunck*>(data);
-		ReleaseMutex(mutex);
+		FILE* file = fopen(path, "rb");
+		if (!file) return -1;
 
-		for (unsigned int idx = trunk->start; idx < trunk->end; ++idx)
+		unsigned char hash[SHA256_DIGEST_LENGTH];
+		SHA256_CTX sha256;
+		SHA256_Init(&sha256);
+		const unsigned int bufSize = 0xffffffff;
+		char* buffer = new char[bufSize];
+		int bytesRead = 0;
+		if (!buffer) return -1;
+		while ((bytesRead = fread(buffer, 1, bufSize, file)))
 		{
-			WaitForSingleObject(mutex, INFINITE);
-
-			auto iMesh = trunk->iMesh;
-			auto face = iMesh->mFaces[idx];
-			std::cout << "Thread: " << trunk->threadID << " batch face : " << idx << std::endl;
-
-			Vertex vertex[3];
-
-			for (int jdx = 0; jdx < 3; ++jdx)
-			{
-				memcpy(&vertex[jdx].position, &(iMesh->mVertices[face.mIndices[jdx]]), sizeof(glm::vec3));
-				memcpy(&vertex[jdx].normal, &(iMesh->mNormals[face.mIndices[jdx]]), sizeof(glm::vec3));
-				vertex[jdx].indice = face.mIndices[jdx];
-
-				vertex[jdx].indice = face.mIndices[jdx];
-			}
-
-			trunk->mesh->createTriangles(vertex[0], vertex[1], vertex[2]);
-			ReleaseMutex(mutex);
+			SHA256_Update(&sha256, buffer, bytesRead);
 		}
+		SHA256_Final(hash, &sha256);
 
-		return;
+		sha256_hash_string(hash, output);
+		fclose(file);
+		delete[] buffer;
+		return 0;
 	}
 
+	void sha256_hash_string(unsigned char hash[SHA256_DIGEST_LENGTH], char outputBuffer[SHA_KEY_LENGH])
+	{
+		int i = 0;
+
+		for (i = 0; i < SHA256_DIGEST_LENGTH; i++)
+		{
+			sprintf(outputBuffer + (i * 2), "%02x", hash[i]);
+		}
+
+		outputBuffer[SHA_KEY_LENGH - 1] = 0;
+	}
 
 	MeshPtr GeometryLoader::load(const char* file)
 	{
@@ -81,6 +72,10 @@ namespace Good
 
 		if (file == NULL)
 			return nullptr;
+
+		char calc_hash[SHA_KEY_LENGH];
+		calc_sha256(file, calc_hash);
+		std::cout << "File : "<< file << " \tSHA1: "  << calc_hash << std::endl;
 
 		std::vector<glm::vec3> positions;
 		std::vector<glm::vec3> normals;

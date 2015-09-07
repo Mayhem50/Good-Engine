@@ -5,10 +5,6 @@
 
 #include "ShaderProgram.h"
 
-#ifdef _DEBUG
-
-#endif
-
 #include <memory>
 
 namespace Good

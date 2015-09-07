@@ -53,6 +53,16 @@ namespace Good
 		glDeleteProgram(_id);
 	}
 
+	bool ShaderProgram::operator==(const ShaderProgram& program)
+	{
+		return (this->bitField() && program.bitField()) && (this->id() && program.id());
+	}
+
+	bool ShaderProgram::operator!=(const ShaderProgram& program)
+	{
+		return !(*this == program);
+	}
+
 	GLenum ShaderProgram::type() const
 	{
 		return _type;

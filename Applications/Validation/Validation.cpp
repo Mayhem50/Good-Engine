@@ -166,6 +166,7 @@ int main(int argc, char* argv[])
 	MaterialPtr metal(new Material);
 
 	metal->parameters.metalic = 1.0;
+	metal->parameters.diffuseColor = glm::vec4(1.0, 0.765557, 0.336057, 0.0);
 
 
 	std::vector<MeshPtr> MeshList;
@@ -177,7 +178,7 @@ int main(int argc, char* argv[])
 	loadedMesh->init();
 	MeshList.push_back(loadedMesh);
 
-	MeshPtr loadedMesh2 = GeometryLoader::load("..\\..\\Assets\\Objects\\suzanne.obj");
+	MeshPtr loadedMesh2 = GeometryLoader::load("..\\..\\Assets\\Objects\\cube.obj");
 	loadedMesh2->setPosition(glm::vec3(2, 1, -2.0));
 	loadedMesh2->setMaterial(metal);
 	loadedMesh2->init();

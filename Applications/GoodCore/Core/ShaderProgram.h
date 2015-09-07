@@ -25,9 +25,14 @@ namespace Good
 	{
 	public:
 		static const ShaderProgramPtr EMPTY_SHADER_PROGRAM;
+
 		static ShaderProgramPtr CreateShaderProgramFromFile(const char* fileName, GLenum type, const char* name = nullptr);
 		static ShaderProgramPtr CreateShaderProgramFromSource(const char* source, GLenum type, const char* name = nullptr);
+
 		~ShaderProgram();
+
+		bool operator==(const ShaderProgram& program);
+		bool operator!=(const ShaderProgram& program);
 
 		GLenum type() const;
 		GLbitfield bitField() const;
